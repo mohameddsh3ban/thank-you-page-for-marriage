@@ -1,0 +1,98 @@
+/* ---------- THE GATE: an invitation — a pastel sky, roses, a sealed letter for her ---------- */
+.gate {
+  position: fixed; inset: 0; z-index: 40; overflow: hidden; isolation: isolate;
+  display: grid; place-items: center;
+  background: var(--sky) url('/art/gate/sky-b.webp') center / cover no-repeat;
+  color: var(--navy);
+}
+.gate::before { /* a soft glow behind the letter so the navy type reads on the clouds */
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(ellipse 46% 52% at 50% 50%, rgb(251 241 238 / 0.42), transparent 75%);
+}
+
+.gate .corner {
+  position: absolute; z-index: 3; font: 600 11px/1 var(--font-label); letter-spacing: 0.16em; text-transform: uppercase;
+  color: color-mix(in srgb, var(--navy) 80%, transparent);
+}
+.corner.tl { top: calc(var(--frame-inset) + 16px); left: calc(var(--frame-inset) + 18px); }
+.corner.tr { top: calc(var(--frame-inset) + 16px); right: calc(var(--frame-inset) + 18px); }
+
+/* roses spilling in from the top corners, swaying a little */
+.g-roses { position: absolute; z-index: 2; width: clamp(300px, 34vw, 600px); pointer-events: none; filter: drop-shadow(0 22px 30px rgb(26 34 54 / 0.35)); }
+.g-roses-tl { top: -9%; left: -8%; rotate: -16deg; animation: sway 9s ease-in-out infinite alternate; }
+.g-roses-tr { top: -8%; right: -9%; rotate: 166deg; scale: 1 -1; animation: sway 11s ease-in-out infinite alternate-reverse; }
+@keyframes sway { from { translate: 0 0; } to { translate: 0 10px; } }
+
+/* petals drifting down behind the letter */
+.g-petals { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.g-petals img {
+  position: absolute; top: -8vh; left: var(--x); width: var(--size); height: auto; opacity: 0.9;
+  filter: drop-shadow(0 6px 8px rgb(26 34 54 / 0.25));
+  animation: petal-fall var(--dur) linear var(--delay) infinite;
+}
+
+/* the invitation */
+.g-stage {
+  position: relative; z-index: 3; display: grid; justify-items: center; text-align: center;
+  transition: transform 1.2s var(--ease-out), opacity 0.9s;
+}
+.g-kicker { margin: 0; font: italic 400 clamp(20px, 1.8vw, 28px)/1 var(--font-serif); color: var(--navy);
+  opacity: 0; transform: translateY(10px); transition: opacity 1.2s 0.3s, transform 1.2s var(--ease-out) 0.3s; }
+.g-name {
+  margin: 4px 0 0; display: flex; align-items: baseline; justify-content: center;
+  font: 400 clamp(110px, 13vw, 220px)/0.82 var(--font-display); color: var(--navy);
+  text-transform: uppercase; letter-spacing: 0.03em;
+  opacity: 0; transform: translateY(16px); transition: opacity 1.4s 0.55s, transform 1.4s var(--ease-out) 0.55s;
+}
+.g-name .script {
+  font-family: var(--font-script); text-transform: none; font-size: 1.45em; line-height: 0.7; color: var(--red);
+  margin-right: -0.12em; transform: translateY(0.1em); text-shadow: 0 8px 26px rgb(26 34 54 / 0.25);
+}
+
+.g-envelope {
+  position: relative; margin-top: clamp(14px, 2.4vh, 30px); padding: 0; width: clamp(280px, 30vw, 440px);
+  opacity: 0; transform: translateY(26px) rotate(-3deg); transition: opacity 1.2s 0.9s, transform 1.4s var(--ease-out) 0.9s;
+}
+.g-envelope img { display: block; width: 100%; height: auto; filter: drop-shadow(0 30px 34px rgb(26 34 54 / 0.4)); transition: transform 0.5s var(--ease-out); }
+.g-envelope:hover img, .g-envelope:focus-visible img { transform: translateY(-6px) rotate(1deg); }
+.g-envelope:focus-visible { outline: none; }
+.g-envelope:focus-visible .g-seal-ring { box-shadow: 0 0 0 3px var(--navy); }
+/* a soft pulse around the wax seal so she knows where to tap */
+.g-seal-ring {
+  position: absolute; left: 37.5%; top: 47%; width: 15%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%;
+  border: 1.5px solid rgb(255 235 220 / 0.85); transform: scale(var(--beat, 1));
+  animation: seal-pulse 2.2s ease-out infinite;
+}
+@keyframes seal-pulse { 0% { opacity: 0.9; scale: 0.8; } 100% { opacity: 0; scale: 1.9; } }
+
+.g-sub {
+  margin: clamp(10px, 2vh, 22px) 0 0; display: flex; gap: 10px; align-items: center;
+  font: italic 400 clamp(16px, 1.3vw, 19px)/1.2 var(--font-serif); color: var(--navy);
+  opacity: 0; transition: opacity 1s 1.5s;
+}
+.g-tap { color: var(--red); animation: breathe 2.6s ease-in-out infinite; }
+.g-dot { opacity: 0.6; }
+
+.gate.is-ready .g-kicker, .gate.is-ready .g-name, .gate.is-ready .g-envelope { opacity: 1; transform: none; }
+.gate.is-ready .g-envelope { transform: rotate(-2deg); }
+.gate.is-ready .g-sub { opacity: 1; }
+
+/* tapped: the letter slips away up, the name stays as a header, her phone rises */
+.gate.is-playing .g-envelope { opacity: 0; transform: translateY(-40px) scale(0.85) rotate(4deg); transition: opacity 0.7s, transform 0.9s var(--ease-out); pointer-events: none; }
+.gate.is-playing .g-sub { opacity: 0; transition: opacity 0.4s; }
+.gate.is-playing .g-stage { transform: translateY(calc(-50vh + 50% + var(--frame-inset) + 64px)) scale(0.62); }
+
+.hint { margin: 0; min-height: 1.4em; font: 400 20px/1.2 var(--font-script); color: var(--red-deep); }
+.hint.is-new { animation: rise 0.45s var(--ease-out) both; }
+
+.gate.is-gone { opacity: 0; visibility: hidden; transition: opacity 0.8s, visibility 0s 0.8s; }
+
+@media (max-height: 760px) {
+  .gate.is-playing .g-stage { transform: translateY(calc(-50vh + 50% + var(--frame-inset) + 40px)) scale(0.5); }
+}
+@keyframes petal-fall {
+  0% { transform: translate3d(0, 0, 0) rotate(0); }
+  50% { transform: translate3d(calc(var(--drift) * 0.6), 60vh, 0) rotate(calc(var(--spin) * 0.5)); }
+  100% { transform: translate3d(var(--drift), 120vh, 0) rotate(var(--spin)); }
+}
+@media (prefers-reduced-motion: reduce) { .g-petals, .g-roses { animation: none !important; } .g-petals { display: none; } }

@@ -1,0 +1,110 @@
+/* #08 — infinite canvas: black ground, tiles scale toward the centre, giant blended title on top */
+.gallery {
+  --gallery-ground: #000;
+  --dive-ease: cubic-bezier(0.7, 0, 0.2, 1);
+  --dive-zoom: 1.28; /* keep in sync with DIVE_ZOOM in gallery.js */
+  padding: 0 !important; background: var(--gallery-ground);
+}
+.gallery-pin { position: relative; height: 100svh; overflow: hidden; background: var(--gallery-ground); }
+.gallery-stage {
+  position: absolute; inset: 0; cursor: grab; touch-action: none; user-select: none;
+  transition: transform 1.5s var(--dive-ease);
+}
+.gallery-stage.is-dragging { cursor: grabbing; }
+.g-slot { position: absolute; left: 0; top: 0; padding: 10px; will-change: transform; transform-origin: center; }
+.g-tile { position: relative; margin: 0; width: 100%; height: 100%; overflow: hidden; background: #111; }
+.g-tile img, .g-tile video { width: 100%; height: 100%; object-fit: cover; display: block; pointer-events: none; }
+.g-slot .g-tile { filter: grayscale(calc(var(--fade, 0) * 1.1)) brightness(calc(1 - var(--fade, 0) * 0.35)); }
+.g-tile figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 22px 12px 10px; color: #fff;
+  font: 400 20px/1 var(--font-script); background: linear-gradient(transparent, rgb(0 0 0 / 0.6));
+  opacity: calc(1 - var(--fade, 0) * 3);
+}
+.g-tile.is-video::after {
+  content: ''; position: absolute; top: 10px; right: 10px; width: 7px; height: 7px; border-radius: 50%;
+  background: var(--red-bright); box-shadow: 0 0 0 3px rgb(226 51 63 / 0.25);
+}
+
+/* the blended title — inverts whatever photo passes under it (skiper79) */
+.gallery-title {
+  position: absolute; inset: 0; z-index: 5; display: grid; place-content: center; text-align: center;
+  pointer-events: none; mix-blend-mode: difference; color: #fff;
+  transition: opacity 0.8s 0.2s, transform 1.4s var(--dive-ease);
+}
+.gallery-title h2 { margin: 0; font: 400 clamp(170px, 27vw, 440px)/0.8 var(--font-display); letter-spacing: 0.01em; }
+.gallery-title h2 .script { font-family: var(--font-script); font-size: 0.62em; margin-right: -0.06em; }
+.gallery-title p { margin: 10px 0 0; font: 600 12px var(--font-label); letter-spacing: 0.2em; text-transform: uppercase; }
+.gallery-head { position: absolute; z-index: 6; top: calc(var(--frame-inset) + 30px); left: var(--gutter); pointer-events: none; transition: opacity 0.5s; }
+.gallery-head .eyebrow { color: var(--blush); }
+
+/* the invitation: a cream seal that ripples like water, with the quieter hint under it */
+.gallery-invite {
+  position: absolute; z-index: 6; left: 50%; bottom: calc(var(--frame-inset) + 64px); translate: -50% 0;
+  display: grid; justify-items: center; gap: 16px;
+  transition: opacity 0.6s 0.3s, visibility 0s 0s;
+}
+.gallery-dive {
+  position: relative; display: grid; place-content: center; width: 118px; aspect-ratio: 1; border-radius: 50%;
+  background: var(--paper); color: var(--ink); cursor: pointer;
+  box-shadow: 0 18px 40px -14px rgb(0 0 0 / 0.9), inset 0 0 0 1px rgb(26 34 54 / 0.12);
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1), background 0.3s;
+}
+.gallery-dive:hover { transform: scale(1.07); background: #fff; }
+.gallery-dive:active { transform: scale(0.97); }
+.gallery-dive:focus-visible { outline: 1px solid var(--paper); outline-offset: 6px; }
+.gd-script { font: 400 25px/0.9 var(--font-script); color: var(--red); }
+.gd-label { margin-top: 4px; font: 600 12px var(--font-label); letter-spacing: 0.2em; text-transform: uppercase; }
+.gd-ripple, .gd-ripple::after {
+  position: absolute; inset: 0; border-radius: 50%; border: 1px solid rgb(251 241 238 / 0.55); pointer-events: none;
+  animation: gd-ripple 2.6s cubic-bezier(0.2, 0.6, 0.3, 1) infinite;
+}
+.gd-ripple::after { content: ''; inset: -1px; animation-delay: 1.3s; }
+@keyframes gd-ripple {
+  from { transform: scale(1); opacity: 0.9; }
+  to { transform: scale(1.85); opacity: 0; }
+}
+.gallery-hint {
+  margin: 0; font: 600 11px var(--font-label); letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--paper); opacity: 0.8; pointer-events: none; text-shadow: 0 1px 3px #000, 0 0 14px #000;
+}
+
+/* the diving view's own furniture, hidden until she dives */
+.gallery-dive-hint, .gallery-surface {
+  position: absolute; z-index: 6; opacity: 0; visibility: hidden;
+  transition: opacity 0.4s, visibility 0s 0.4s;
+}
+.gallery-dive-hint {
+  top: calc(var(--frame-inset) + 26px); left: var(--gutter); margin: 0; pointer-events: none;
+  font: 600 11px/1.9 var(--font-label); letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper);
+}
+.gallery-dive-hint span { display: block; color: var(--blush); }
+.gallery-surface {
+  top: calc(var(--frame-inset) + 22px); right: var(--gutter); padding: 10px 18px 10px 16px;
+  font: 600 11px var(--font-label); letter-spacing: 0.18em; text-transform: uppercase; color: var(--paper);
+  border: 1px solid rgb(251 241 238 / 0.5); background: rgb(0 0 0 / 0.55); backdrop-filter: blur(8px);
+  transition: opacity 0.4s, visibility 0s 0.4s, background 0.3s, color 0.3s;
+}
+.gallery-surface::before { content: '↑'; margin-right: 10px; font-family: var(--font-body); }
+.gallery-surface:hover, .gallery-surface:focus-visible { background: var(--paper); color: var(--ink); outline: none; }
+
+/* diving: the canvas lifts out of the page and fills the whole screen (above the frame and
+   the grain, below the song's lyrics and controls) */
+.gallery.is-diving .gallery-pin {
+  position: fixed !important; inset: 0 !important; z-index: 59;
+  width: 100vw !important; height: 100vh !important; max-width: none !important; max-height: none !important;
+  transform: none !important; translate: none !important;
+}
+.gallery.is-diving .gallery-stage { transform: scale(var(--dive-zoom)); }
+.gallery.is-diving .gallery-title { opacity: 0; transform: scale(2.8); transition: opacity 0.6s, transform 1.4s var(--dive-ease); }
+.gallery.is-diving .gallery-head { opacity: 0; }
+.gallery.is-diving .gallery-invite { opacity: 0; visibility: hidden; transition: opacity 0.35s, visibility 0s 0.35s; }
+.gallery.is-diving .gallery-dive-hint,
+.gallery.is-diving .gallery-surface { opacity: 1; visibility: visible; transition: opacity 0.7s 0.7s, visibility 0s, background 0.3s, color 0.3s; }
+
+/* the chapter moon would sit on top of "come back up" */
+html.gallery-diving .moon-nav { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gd-ripple, .gd-ripple::after { animation: none; }
+  .gallery-stage, .gallery-title { transition: opacity 0.4s; }
+}

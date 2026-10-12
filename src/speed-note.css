@@ -1,0 +1,35 @@
+/* "slow down": a note from me that drops in when she scrolls too fast (speed-note.js).
+   Paper card in the site's own type: red script title, navy serif, a hairline counting down. */
+.speed-note {
+  --show-ms: 6500ms;
+  position: fixed; z-index: 75; left: 50%; top: calc(var(--frame-inset) + 22px);
+  width: min(440px, calc(100vw - 2 * var(--gutter))); padding: 18px 26px 20px; translate: -50% -24px;
+  display: grid; justify-items: center; gap: 4px; text-align: center;
+  color: var(--ink);
+  background: linear-gradient(rgb(251 241 238 / 0.84), rgb(251 241 238 / 0.84)), var(--grain) 0 0 / 180px, var(--paper); /* cream paper, grain kept faint */
+  box-shadow: 0 30px 60px -28px rgb(26 34 54 / 0.55), 0 0 0 1px rgb(26 34 54 / 0.1);
+  rotate: -0.6deg; opacity: 0; filter: blur(6px);
+  transition: opacity 0.5s ease, translate 0.8s var(--ease-out), filter 0.5s ease;
+}
+.speed-note.is-in { opacity: 1; translate: -50% 0; filter: none; }
+.speed-note::before { /* a strip of blush tape holding it up, like the gate's card */
+  content: ''; position: absolute; top: -11px; left: 50%; width: 104px; height: 22px; translate: -50% 0; rotate: 2deg;
+  background: rgb(239 195 204 / 0.9); mix-blend-mode: multiply;
+}
+.sn-kicker { margin: 0; font: 600 10px/1 var(--font-label); letter-spacing: 0.22em; text-transform: uppercase; color: var(--navy); opacity: 0.75; }
+.sn-title { margin: 2px 0 0; font: 400 clamp(34px, 3vw, 44px)/1 var(--font-script); color: var(--red); }
+.sn-body { margin: 4px 0 0; font: italic 400 16px/1.5 var(--font-serif); color: var(--navy); }
+.sn-body span { display: block; }
+.sn-sign { margin: 6px 0 0; font: 400 20px/1 var(--font-script); color: var(--red-deep); }
+.sn-timer { position: absolute; left: 26px; right: 26px; bottom: 9px; height: 1px; background: var(--red); transform-origin: left; transform: scaleX(0); opacity: 0.55; }
+.speed-note.is-in .sn-timer { animation: sn-count var(--show-ms) linear forwards; }
+@keyframes sn-count { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+.sn-close {
+  position: absolute; top: 6px; right: 10px; width: 28px; height: 28px; padding: 0; border-radius: 50%;
+  font: 400 20px/1 var(--font-serif); color: var(--navy); opacity: 0.55; transition: opacity 0.2s, background 0.2s;
+}
+.sn-close:hover, .sn-close:focus-visible { opacity: 1; background: rgb(26 34 54 / 0.06); outline: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .speed-note { transition: opacity 0.3s; translate: -50% 0; filter: none; }
+}

@@ -1,0 +1,283 @@
+/* #04 — "a ledger of us": wine velvet, a cream ledger page with ink dots read four ways, our days as
+   gold hearts, lost stretches drawn as dashes, and a torn-out page for any one day */
+.days {
+  --gold: #c99a3c;
+  --gold-soft: #e8c37a;
+  --paper-note: #fbf7ef;
+  --days-pad: calc(var(--frame-inset) + 56px);
+  /* ledger height ≈ fixed rows (headings, key, padding) + width × slope, so its width can be capped
+     from the screen height */
+  --ledger-fixed: 250px;
+  --ledger-slope: 0.52;
+  background: var(--wine) var(--night); color: var(--paper);
+  display: grid; grid-template-columns: minmax(300px, 0.62fr) minmax(0, 1.7fr); gap: clamp(28px, 4vw, 64px); align-items: center;
+}
+.days::before { /* a scatter of faint stars */ content: ''; position: absolute; inset: 0; z-index: -1; opacity: 0.55; pointer-events: none;
+  background: radial-gradient(1px 1px at 12% 18%, #fff, transparent), radial-gradient(1px 1px at 32% 72%, #fff, transparent), radial-gradient(1.5px 1.5px at 58% 12%, #ffe9ee, transparent), radial-gradient(1px 1px at 82% 64%, #fff, transparent), radial-gradient(1px 1px at 92% 22%, #fff, transparent), radial-gradient(1.5px 1.5px at 22% 88%, #ffe9ee, transparent), radial-gradient(1px 1px at 70% 90%, #fff, transparent); }
+
+#site section.days { padding-top: var(--days-pad); padding-bottom: var(--days-pad); }
+
+/* the left column and the day page share one cell; the page slides over the column */
+.days-head, .day-page { grid-column: 1; grid-row: 1; }
+/* the whole ledger fits one laptop screen: its height follows its width, so cap the width */
+.ledger { grid-column: 2; grid-row: 1; justify-self: center; width: 100%; max-width: calc((100svh - 2 * var(--days-pad) - var(--ledger-fixed)) / var(--ledger-slope)); }
+.days-head { transition: opacity 0.45s, transform 0.6s var(--ease-out), visibility 0s 0s; }
+.days.is-reading .days-head { opacity: 0; transform: translateX(-24px); visibility: hidden; transition: opacity 0.3s, transform 0.5s var(--ease-out), visibility 0s 0.3s; }
+
+.days-head .eyebrow { color: var(--blush); }
+.days-title { margin: 8px 0 0; font: 400 clamp(68px, 6.6vw, 118px)/0.86 var(--font-display) !important; text-transform: uppercase; }
+.days-title .script { font-family: var(--font-script); text-transform: none; font-size: 0.9em; color: var(--blush); }
+.days-sub { margin: 14px 0 0; max-width: 32ch; min-height: 2.8em; font: italic 400 17px/1.4 var(--font-serif); color: rgb(239 230 214 / 0.85); }
+
+/* facts: they swap with the lens; the live ones light their days up in the ledger */
+.days-facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 18px 0 0; padding: 14px 0 0; border-top: 1px solid rgb(239 230 214 / 0.25); }
+.days-facts .fact { display: grid; align-content: start; }
+.days-facts dd { margin: 0; font: 400 clamp(26px, 2.3vw, 34px)/1 var(--font-display); }
+.days-facts dt { font: 600 11px/1.35 var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.75; margin-top: 6px; }
+.fact-btn { font: inherit; text-align: left; padding: 0 0 3px; border-bottom: 1px dashed rgb(239 230 214 / 0.35); transition: color 0.25s, border-color 0.25s; }
+.fact.is-live:hover .fact-btn, .fact-btn:focus-visible, .fact.is-pinned .fact-btn { color: var(--gold-soft); border-bottom-color: var(--gold-soft); outline: none; }
+.fact.is-pinned dt { color: var(--gold-soft); opacity: 1; }
+.days-facts.is-swap .fact { animation: fact-in 0.6s var(--ease-out) both; }
+.days-facts.is-swap .fact:nth-child(2) { animation-delay: 0.06s; }
+.days-facts.is-swap .fact:nth-child(3) { animation-delay: 0.12s; }
+@keyframes fact-in { from { opacity: 0; transform: translateY(10px); } }
+
+/* our days: two compact columns */
+.days-marked-title { margin: 22px 0 6px; }
+.marked-days { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 0 10px; }
+.marked-days button {
+  width: 100%; display: grid; gap: 1px; text-align: left; padding: 5px 8px; color: var(--paper);
+  border-left: 2px solid transparent; transition: background 0.2s, border-color 0.2s;
+}
+.marked-days time { font: 600 10px var(--font-label); letter-spacing: 0.08em; color: var(--gold-soft); }
+.marked-days span { font: 400 18px/1.1 var(--font-script); }
+.marked-days button:hover, .marked-days button:focus-visible { background: rgb(232 195 122 / 0.1); border-left-color: var(--gold-soft); outline: none; }
+
+/* ---------- the ledger page ---------- */
+.ledger {
+  position: relative; padding: 24px clamp(18px, 2.4vw, 34px) 20px; background: var(--paper); color: var(--ink); rotate: -0.5deg;
+  box-shadow: 0 50px 90px -40px rgb(0 0 0 / 0.85), 0 0 0 1px rgb(42 7 16 / 0.08);
+}
+.ledger::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgb(201 218 243 / 0.35), transparent 30%, rgb(239 195 204 / 0.25)); }
+.ledger::after { /* tape */
+  content: ''; position: absolute; top: -12px; left: 12%; width: 120px; height: 24px; rotate: -4deg; background: rgb(239 195 204 / 0.85); mix-blend-mode: multiply;
+}
+.ledger-top { position: relative; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid rgb(11 6 7 / 0.15); }
+.ledger-date { margin: 0; font: 400 clamp(32px, 2.6vw, 42px)/1 var(--font-display); color: var(--navy); font-variant-numeric: tabular-nums; }
+.ledger-total { margin: 0; font: 600 11px var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: rgb(11 6 7 / 0.7); }
+.ledger-total b { font: 400 22px var(--font-display); letter-spacing: 0; color: var(--ink); margin-right: 4px; font-variant-numeric: tabular-nums; }
+
+.ledger-years { position: relative; display: grid; grid-template-columns: 1fr 1fr; gap: 12px clamp(20px, 2.4vw, 36px); }
+.lyear h3 { margin: 0 0 3px; font: 400 26px/1 var(--font-display); color: var(--navy); }
+.lgrid { display: grid; grid-template-columns: 30px repeat(31, 1fr); gap: 1px; align-items: center; }
+/* months in small ledger capitals; a zero line box lets the dots set the row height */
+.lmonth { font: 600 clamp(8px, 0.62vw, 10px)/0 var(--font-label); letter-spacing: 0.1em; text-transform: uppercase; color: rgb(43 55 84 / 0.6); }
+.lyear-note { margin: 14px 0 0 30px; max-width: 34ch; font: 400 17px/1.3 var(--font-script); color: rgb(43 55 84 / 0.62); }
+
+/* one day */
+.ld { position: relative; aspect-ratio: 1; display: grid; place-items: center; }
+.ld.has { cursor: pointer; }
+.ld::before { /* the ink dot */
+  content: ''; width: 100%; height: 100%; border-radius: 50%; background: var(--c, var(--red-deep));
+  transform: scale(0); opacity: var(--a, 1);
+  transition: transform 0.35s var(--ease-out), background-color 0.5s, opacity 0.5s, border-radius 0.3s;
+}
+.ld.is-in::before { transform: scale(var(--s, 0.22)); }
+.ld:not(.has)::before, .ld.z::before { background: rgb(43 55 84 / 0.16); opacity: 1; }
+.ld.z.is-in::before { transform: scale(0.22); }
+.ld.has:hover::before { transform: scale(1.3); filter: brightness(1.2); }
+.ld.void, .ld.pre, .ld.future { visibility: hidden; }
+/* a day lost from the export (or spent apart) inside a month we still have */
+.ld.gap::before { height: 1.5px; border-radius: 1px; background: rgb(43 55 84 / 0.35); }
+.ld.gap.apart::before { background: rgb(140 20 38 / 0.35); }
+.ld.gap.is-in::before { transform: scaleX(0.75); }
+/* the selected day */
+.ld.is-sel::after { content: ''; position: absolute; inset: -3px; border: 1.5px solid var(--ink); border-radius: 50%; animation: sel-in 0.4s var(--ease-out); }
+@keyframes sel-in { from { transform: scale(2); opacity: 0; } }
+
+/* our days: gold hearts */
+.ld.mark::before { display: none; }
+.ld.mark { color: var(--gold); font: 400 13px/0 serif; text-shadow: 0 0 6px rgb(201 154 60 / 0.6); transform: scale(0); transition: transform 0.4s var(--ease-out), opacity 0.3s; }
+.ld.mark.is-in { transform: scale(1.2); }
+.ld.mark.has { cursor: pointer; }
+.ld.mark.is-pulse { animation: heart-pulse 0.9s ease-in-out infinite; color: var(--red); }
+@keyframes heart-pulse { 50% { transform: scale(2.1); } }
+
+/* still writing: the day after the export ends */
+.ld.now::before { background: var(--red); transform: scale(0); }
+.ld.now.is-in::before { transform: scale(0.55); animation: now-pulse 1.8s ease-in-out infinite; }
+.ld.now::after {
+  content: 'still writing'; position: absolute; left: 150%; top: 50%; translate: 0 -50%; white-space: nowrap;
+  font: 400 15px/1 var(--font-script); color: var(--red-deep); opacity: 0; transition: opacity 0.6s 0.3s;
+}
+.ld.now.is-in::after { opacity: 1; }
+@keyframes now-pulse { 50% { transform: scale(0.85); box-shadow: 0 0 0 4px rgb(195 24 43 / 0.15); } }
+
+/* a whole month lost (or apart): one dashed line with the reason on the first one */
+.lhole { grid-column: 2 / -1; aspect-ratio: 31 / 1; display: flex; align-items: center; gap: 10px; cursor: help; }
+.lhole::before, .lhole::after { content: ''; flex: 1; border-top: 1.5px dashed rgb(43 55 84 / 0.3); }
+.lhole::after { flex: 3; }
+.lhole em { font: 400 15px/1 var(--font-script); font-style: normal; white-space: nowrap; color: rgb(43 55 84 / 0.7); }
+.lhole.apart::before, .lhole.apart::after { border-top-style: dotted; border-top-color: rgb(140 20 38 / 0.35); }
+.lhole.apart em { color: rgb(140 20 38 / 0.75); }
+
+/* ---------- lenses ---------- */
+.ledger.is-switching .ld::before { transition-delay: calc(var(--col, 0) * 11ms + var(--row, 0) * 7ms); }
+/* late: navy moons, the bigger the later we slept */
+.ledger[data-lens='late'] .ld.has:not(.z)::before { background: var(--navy); box-shadow: 0 0 5px rgb(43 55 84 / 0.25); }
+/* love: hearts */
+.ledger[data-lens='love'] .ld.has:not(.z)::before {
+  background: var(--red); border-radius: 0;
+  -webkit-mask: var(--heart) center / contain no-repeat; mask: var(--heart) center / contain no-repeat;
+}
+.ledger { --heart: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.4s-8.3-5.1-10.2-10C.4 7.7 2.6 3.6 6.6 3.6c2.4 0 4.1 1.4 5.4 3.2 1.3-1.8 3-3.2 5.4-3.2 4 0 6.2 4.1 4.8 7.8-1.9 4.9-10.2 10-10.2 10z'/%3E%3C/svg%3E"); }
+/* highlight from a fact: everything else sinks */
+.ledger.is-hl .lgrid .ld.has:not(.hl)::before { opacity: 0.1; }
+.ledger.is-hl .lgrid .ld.hl::before { opacity: 1; }
+.ledger.is-hl .lgrid .ld.mark:not(.hl) { opacity: 0.3; }
+
+/* the key, in the blank space beside the last year */
+.ledger-key { align-self: start; display: grid; gap: 12px; justify-items: start; padding: 30px 0 0 6px; position: relative; }
+.lk-title { margin: 0; font: 600 11px var(--font-label); letter-spacing: 0.16em; text-transform: uppercase; color: rgb(43 55 84 / 0.6); }
+.lk-lenses { display: flex; gap: clamp(14px, 1.6vw, 24px); }
+.lk-lens {
+  position: relative; padding: 0 0 6px; font: italic 400 clamp(26px, 2.2vw, 34px)/1 var(--font-serif); color: rgb(43 55 84 / 0.38);
+  transition: color 0.3s;
+}
+.lk-lens::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.45s var(--ease-out); }
+.lk-lens:hover, .lk-lens:focus-visible { color: var(--navy); outline: none; }
+.lk-lens[aria-selected='true'] { color: var(--navy); }
+.lk-lens[aria-selected='true']::after { transform: scaleX(1); }
+.lk-legend, .lk-extras { display: flex; align-items: center; gap: 7px; margin: 0; font: 600 10px var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: rgb(11 6 7 / 0.6); }
+.lk-legend .ld { width: 13px; cursor: default; }
+.lk-legend .ld::before { transition: none; }
+.lk-extras { gap: 16px; }
+.lk-swatches { display: flex; flex-wrap: wrap; max-width: 300px; gap: 6px 14px; margin: 0; font: 600 10px var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: rgb(11 6 7 / 0.6); }
+.lk-swatches[hidden], .lk-legend[hidden] { display: none; }
+.lk-swatch { display: inline-flex; align-items: center; gap: 6px; }
+.lk-swatch::before { content: ''; width: 10px; height: 10px; border-radius: 50%; background: var(--c); }
+.lk-heart { color: #a87a26; }
+.lk-lost::before { content: ''; display: inline-block; width: 22px; margin-right: 7px; vertical-align: middle; border-top: 1.5px dashed rgb(43 55 84 / 0.4); }
+.lk-replay { margin-top: 2px; font: 600 10px var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; color: var(--red-deep); padding: 4px 0; border-bottom: 1px solid rgb(140 20 38 / 0.3); }
+.lk-replay:hover, .lk-replay:focus-visible { border-bottom-color: var(--red-deep); outline: none; }
+
+/* ---------- the taped note on hover ---------- */
+.day-note {
+  position: fixed; z-index: 70; width: 240px; padding: 12px 14px 12px; background: var(--paper-note); color: var(--ink); rotate: 1.5deg;
+  box-shadow: 0 20px 40px -14px rgb(0 0 0 / 0.6); pointer-events: none;
+}
+.day-note::before { content: ''; position: absolute; top: -10px; left: 50%; width: 70px; height: 20px; translate: -50% 0; rotate: -3deg; background: rgb(147 179 228 / 0.75); mix-blend-mode: multiply; }
+.dn-photo { display: block; width: 100%; aspect-ratio: 4 / 3; object-fit: cover; margin-bottom: 8px; }
+.dn-photo[hidden] { display: none; }
+.dn-date { margin: 0; font: 600 11px var(--font-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--red-deep); }
+.dn-count { margin: 4px 0 0; font: 400 34px/1 var(--font-display); }
+.dn-count:empty { display: none; }
+.dn-title { margin: 6px 0 0; font: italic 400 16px/1.25 var(--font-serif); color: var(--navy); }
+.dn-title:empty { display: none; }
+.dn-meta { margin: 4px 0 0; font: 400 18px/1.2 var(--font-script); }
+.dn-meta:empty { display: none; }
+.dn-hint { margin: 8px 0 0; padding-top: 6px; border-top: 1px solid rgb(26 34 54 / 0.12); font: 600 10px var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: rgb(26 34 54 / 0.55); }
+.day-note:not(.can-open) .dn-hint { display: none; }
+
+/* ---------- a page torn out for one day ---------- */
+.day-page {
+  position: relative; align-self: center; z-index: 2; padding: 26px 26px 16px; background: var(--paper-note); color: var(--ink);
+  max-height: calc(100svh - 2 * var(--days-pad)); overflow-y: auto; scrollbar-width: thin;
+  rotate: -0.8deg; box-shadow: 0 40px 70px -30px rgb(0 0 0 / 0.85); outline: none;
+}
+.day-page::before { content: ''; position: absolute; top: -11px; left: 22%; width: 90px; height: 22px; rotate: -5deg; background: rgb(147 179 228 / 0.75); mix-blend-mode: multiply; }
+.day-page.is-flip { animation: page-in 0.55s var(--ease-out); transform-origin: left center; }
+@keyframes page-in { from { opacity: 0; transform: perspective(900px) rotateY(-14deg) translateX(-14px); } }
+.dp-eyebrow { margin: 0; font: 600 11px/1.4 var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--red-deep); }
+.dp-date { margin: 6px 0 0; font: 400 clamp(34px, 3vw, 46px)/0.95 var(--font-display); color: var(--navy); }
+.dp-mark { margin: 6px 0 0; font: 400 20px/1 var(--font-script); color: #a87a26; }
+/* the head and the polaroid share the first row; everything else runs the full width below */
+.day-page { display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; align-content: start; }
+.day-page > * { grid-column: 1 / -1; }
+.day-page > .dp-head { grid-column: 1; grid-row: 1; }
+.day-page > .dp-photo { grid-column: 2; grid-row: 1; align-self: start; }
+.dp-photo { position: relative; z-index: 1; width: 124px; margin: -12px -14px 6px 0; padding: 6px 6px 20px; background: #fff; rotate: 5deg; box-shadow: 0 14px 26px -12px rgb(0 0 0 / 0.55); }
+.dp-photo img { display: block; width: 100%; aspect-ratio: 4 / 5; object-fit: cover; background: #e9e2d6; }
+.dp-photo-next, .dp-photo-frame { position: relative; display: block; width: 100%; padding: 0; }
+.dp-photo-next { cursor: pointer; }
+.dp-photo-next:hover img { filter: brightness(1.06); }
+.dp-photo-next:focus-visible { outline: 1px solid var(--red-deep); outline-offset: 3px; }
+.dp-photo figcaption { position: absolute; left: 0; right: 0; bottom: 3px; text-align: center; font: 400 14px/1 var(--font-script); color: rgb(26 34 54 / 0.72); }
+/* a still from a video */
+.dp-photo.is-video .dp-photo-next::after, .dp-photo.is-video .dp-photo-frame::after {
+  content: '▶'; position: absolute; right: 6px; bottom: 6px; width: 20px; height: 20px; border-radius: 50%;
+  background: rgb(0 0 0 / 0.55); color: #fff; font: 8px/20px var(--font-body); text-align: center; padding-left: 2px;
+}
+.dp-photo.is-turn { animation: photo-turn 0.45s var(--ease-out); }
+@keyframes photo-turn { 40% { rotate: -1deg; scale: 0.95; } }
+/* the day itself: how it felt, what happened, and its thank you */
+.dp-story { margin-top: 4px; }
+.dp-mood { display: flex; align-items: center; gap: 7px; margin: 12px 0 0; font: 600 10px/1.3 var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; color: rgb(26 34 54 / 0.66); }
+.dp-mood::before { content: ''; flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--c, var(--red)); }
+.dp-title { margin: 6px 0 0; font: 400 clamp(25px, 2.1vw, 31px)/1.05 var(--font-script); color: var(--red-deep); }
+.dp-context { margin: 10px 0 0; font: 400 15px/1.55 var(--font-body); color: rgb(26 34 54 / 0.88); text-wrap: pretty; }
+.dp-thanks { clear: both; position: relative; margin: 16px 0 0; padding: 14px 16px 15px 18px; background: rgb(195 24 43 / 0.06); border-left: 2px solid var(--red); }
+.dp-thanks::after { /* a little wax-red heart in the corner */
+  content: ''; position: absolute; top: 12px; right: 12px; width: 13px; height: 13px; background: var(--red); opacity: 0.75;
+  -webkit-mask: var(--heart) center / contain no-repeat; mask: var(--heart) center / contain no-repeat;
+}
+.dp-thanks-no { display: flex; align-items: baseline; gap: 6px; font: 600 10px var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; color: rgb(140 20 38 / 0.8); }
+.dp-thanks-no b { font: 400 22px/1 var(--font-display); letter-spacing: 0; color: var(--red-deep); font-variant-numeric: tabular-nums; }
+.dp-thanks p { margin: 7px 0 0; font: italic 400 18px/1.4 var(--font-serif); color: var(--navy); text-wrap: pretty; }
+.day-page { --heart: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 21.4s-8.3-5.1-10.2-10C.4 7.7 2.6 3.6 6.6 3.6c2.4 0 4.1 1.4 5.4 3.2 1.3-1.8 3-3.2 5.4-3.2 4 0 6.2 4.1 4.8 7.8-1.9 4.9-10.2 10-10.2 10z'/%3E%3C/svg%3E"); }
+.dp-count { margin: 16px 0 6px; font: 600 11px var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: rgb(26 34 54 / 0.7); }
+.dp-count b { font: 400 40px/1 var(--font-display); letter-spacing: 0; color: var(--ink); margin-right: 4px; font-variant-numeric: tabular-nums; }
+.dp-split { display: flex; gap: 2px; height: 24px; font: 600 10px/24px var(--font-label); letter-spacing: 0.1em; text-transform: uppercase; color: #fff; }
+.dp-split span { min-width: 64px; padding: 0 8px; white-space: nowrap; overflow: hidden; }
+.dp-split b { font-weight: 700; margin-right: 3px; opacity: 0.8; }
+.dp-you { background: var(--red); }
+.dp-me { background: var(--navy); text-align: right; }
+.dp-label { margin: 16px 0 6px; font: 600 10px var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; color: rgb(26 34 54 / 0.6); }
+.dp-hours { display: grid; grid-template-columns: repeat(24, 1fr); gap: 2px; align-items: end; height: 54px; }
+.dp-hours i { height: calc(var(--h) * 100%); min-height: 3px; background: var(--red-deep); border-radius: 1px 1px 0 0; }
+.dp-hours i:nth-child(-n + 5), .dp-hours i:nth-child(n + 23) { background: var(--navy); } /* the night hours */
+.dp-hours i.is-quiet { background: rgb(43 55 84 / 0.15); height: 3px; }
+.dp-ticks { display: flex; justify-content: space-between; margin-top: 4px; font: 600 9px var(--font-label); letter-spacing: 0.08em; text-transform: uppercase; color: rgb(26 34 54 / 0.5); }
+.dp-times { list-style: none; margin: 12px 0 0; padding: 0; display: grid; gap: 2px; font: 400 21px/1.15 var(--font-script); color: var(--navy); }
+.dp-line { margin: 14px 0 0; padding: 10px 0 0; border-top: 1px solid rgb(26 34 54 / 0.12); }
+.dp-line[hidden] { display: none; }
+.dp-line blockquote { margin: 0; font: italic 400 17px/1.4 var(--font-serif); color: var(--ink); quotes: '“' '”'; }
+.dp-line blockquote::before { content: open-quote; }
+.dp-line blockquote::after { content: close-quote; }
+.dp-line figcaption { display: inline; margin-left: 6px; font: 400 18px/1 var(--font-script); color: var(--red-deep); }
+.dp-more { margin-left: 10px; font: 600 10px var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: rgb(26 34 54 / 0.55); border-bottom: 1px solid rgb(26 34 54 / 0.25); }
+.dp-more:hover, .dp-more:focus-visible { color: var(--red-deep); border-bottom-color: var(--red-deep); outline: none; }
+.dp-meta { margin: 12px 0 0; font: 600 10px/1.5 var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: rgb(26 34 54 / 0.6); }
+.dp-meta span { white-space: nowrap; }
+.dp-meta span + span::before { content: ' · '; }
+.dp-nav { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 14px; padding-top: 10px; border-top: 1px solid rgb(26 34 54 / 0.12); }
+.dp-nav button { white-space: nowrap; font: 600 11px var(--font-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--navy); padding: 4px 2px; border-bottom: 1px solid transparent; }
+.dp-nav button:hover:not(:disabled), .dp-nav button:focus-visible { color: var(--red-deep); border-bottom-color: currentColor; outline: none; }
+.dp-nav button:disabled { visibility: hidden; }
+.dp-nav .dp-close { color: var(--red-deep); }
+.dp-nav-mid { display: flex; gap: 14px; }
+.dp-nav .dp-play::before { content: '▶'; display: inline-block; margin-right: 5px; font-size: 8px; vertical-align: 1px; }
+.dp-nav .dp-play[aria-pressed='true']::before { content: '❚❚'; letter-spacing: -1px; }
+/* reading on: the thank you gets a soft underline while the card waits to turn */
+.day-page.is-reading-on .dp-thanks { box-shadow: inset 0 -2px 0 rgb(195 24 43 / 0.25); }
+
+/* shorter laptop screens: tighter margins and type so the chapter still fits one screen */
+@media (max-height: 880px) {
+  .days { --days-pad: calc(var(--frame-inset) + 30px); }
+  .days-title { font-size: clamp(54px, min(6.6vw, 10.5svh), 118px) !important; }
+  .days-sub { margin-top: 10px; font-size: 15px; min-height: 0; }
+  .days-facts { margin-top: 12px; padding-top: 10px; }
+  .days-facts dd { font-size: clamp(22px, 2vw, 30px); }
+  .days-marked-title { margin-top: 14px; }
+  .marked-days button { padding-block: 3px; }
+  .marked-days span { font-size: 16px; }
+  .dp-hours { height: 44px; }
+  .dp-count b { font-size: 34px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ld::before { transform: scale(var(--s, 0.22)); transition: none; }
+  .ld.mark { transform: scale(1.2); }
+  .ld.now::before { animation: none; transform: scale(0.55); }
+  .day-page.is-flip, .days-facts.is-swap .fact { animation: none; }
+}

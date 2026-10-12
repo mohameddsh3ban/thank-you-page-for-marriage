@@ -1,0 +1,393 @@
+<!-- 01-hero.html -->
+<!-- #01 — the poster: her name, our photo in the panel, two hands reaching across it.
+     No .eyebrow here on purpose: flow.js names this chapter itself (the poster stays clean). -->
+<section id="hero" class="hero" aria-labelledby="hero-title">
+  <header class="hero-top">
+    <p class="hero-kicker"><span>a thank you letter</span><span>for <span data-her-name>Mia</span>, from mark</span></p>
+    <h1 class="hero-title" id="hero-title">Mia</h1>
+  </header>
+
+  <p class="hero-note">one year married, almost seven years of us. this is a small museum i built by hand to say the thing i never say enough. scroll slowly — every room is a thank you.</p>
+  <p class="hero-date">since 14 · 09 · 2019</p>
+
+  <dl class="counter hero-days">
+    <div><dt>days since hello</dt><dd data-unit="days">0</dd></div>
+  </dl>
+
+  <div class="hero-stage">
+    <figure class="hero-panel" id="hero-frame">
+      <img class="hero-photo" id="hero-photo" alt="us" decoding="async">
+    </figure>
+
+    <img class="hero-rose" src="/art/rose-cluster.webp" alt="" aria-hidden="true" decoding="async">
+
+    <p class="hero-echo echo-l" aria-hidden="true"><span>thank you for saying yes</span><span>thank you for saying yes</span><span>thank you for saying yes</span></p>
+    <p class="hero-echo echo-r" aria-hidden="true"><span>and for every day since</span><span>and for every day since</span><span>and for every day since</span></p>
+
+    <dl class="counter hero-clock">
+      <div><dt>hours · minutes · seconds</dt><dd><span data-unit="hours">00</span>:<span data-unit="minutes">00</span>:<span data-unit="seconds">00</span></dd></div>
+    </dl>
+
+    <div class="hero-hands" aria-hidden="true">
+      <img class="hand hand-adam" id="hand-adam" src="/art/hand-adam.webp" alt="" width="1600" height="628" decoding="async">
+      <img class="hand hand-god" id="hand-god" src="/art/hand-god.webp" alt="" width="1600" height="691" decoding="async">
+      <div class="star" id="hero-star"><svg viewBox="-50 -50 100 100"><path d="M0-50 6-6 50 0 6 6 0 50-6 6-50 0-6-6Z"/></svg></div>
+    </div>
+
+    <span class="hero-lines" aria-hidden="true"><i class="hl-a"></i><i class="hl-b"></i><i class="hl-c"></i><i class="hl-d"></i></span>
+  </div>
+
+  <p class="hero-sign">— mark</p>
+</section>
+
+<!-- 02-origin.html -->
+<section id="origin" class="origin" aria-label="How it started">
+  <div class="origin-pin">
+    <header class="origin-head">
+      <p class="eyebrow">#02 — How it started</p>
+      <h2 class="origin-title"><span>Sep</span><span>14</span></h2>
+      <p class="script origin-script">two thousand nineteen</p>
+      <p class="origin-note">a rooftop in brooklyn, a photo i promised to send, and a poll you swear wasn’t about me.</p>
+    </header>
+
+    <p class="origin-ghost" aria-hidden="true">send it?</p>
+
+    <div class="iphone-stage" aria-hidden="true">
+      <div class="iphone" id="origin-phone">
+        <span class="ip-btn ip-action"></span>
+        <span class="ip-btn ip-vol-up"></span>
+        <span class="ip-btn ip-vol-down"></span>
+        <span class="ip-btn ip-power"></span>
+        <div class="ip-screen">
+          <div class="ip-status">
+            <span class="ip-time">9:41</span>
+            <span class="ip-icons">
+              <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="0.8"/><rect x="5" y="5.5" width="3" height="6.5" rx="0.8"/><rect x="10" y="3" width="3" height="9" rx="0.8"/><rect x="15" y="0" width="3" height="12" rx="0.8"/></svg>
+              <svg viewBox="0 0 16 12"><path d="M8 2.2c2.4 0 4.6.9 6.3 2.5l1.2-1.3A10.6 10.6 0 0 0 8 .4C5.2.4 2.5 1.5.5 3.4l1.2 1.3A9 9 0 0 1 8 2.2zm0 3.6c1.4 0 2.7.5 3.7 1.4l1.2-1.3A7.2 7.2 0 0 0 8 4c-1.8 0-3.6.7-4.9 1.9l1.2 1.3c1-.9 2.3-1.4 3.7-1.4zm0 3.6c-.5 0-1 .2-1.3.5L8 11.6l1.3-1.7c-.3-.3-.8-.5-1.3-.5z"/></svg>
+              <span class="ip-battery"><i></i></span>
+            </span>
+          </div>
+
+          <div class="ip-island">
+            <img class="ig-avatar isl-avatar" src="/photos/mm-17.t.webp" alt="">
+            <span class="isl-text"><b data-her-name="lower">mia</b><span>ok so… where’s my photo 👀</span></span>
+            <i class="isl-app"></i>
+          </div>
+
+          <!-- 1–2 · her story -->
+          <div class="ip-app ig-story">
+            <div class="story-bars"><i></i><i></i><i></i></div>
+            <div class="story-top">
+              <span class="cf-ring"><img class="ig-avatar" src="/photos/mm-17.t.webp" alt=""></span>
+              <span class="story-user"><span data-her-name="lower">mia</span> <em>12m</em></span>
+              <span class="cf-badge"><svg viewBox="0 0 24 24"><path d="M12 2.5l2.9 6 6.6.9-4.8 4.6 1.2 6.5L12 17.4l-5.9 3.1 1.2-6.5-4.8-4.6 6.6-.9z"/></svg>Close Friends</span>
+            </div>
+            <canvas class="story-art" id="story-rose"></canvas>
+            <div class="poll">
+              <p class="poll-q">rooftop guy, send the photo?</p>
+              <div class="poll-opts">
+                <div class="poll-opt yes"><span class="poll-fill"></span><b>YES</b><em class="poll-pct">94%</em></div>
+                <div class="poll-opt no"><span class="poll-fill"></span><b>NO</b><em class="poll-pct">6%</em></div>
+              </div>
+            </div>
+            <span class="tap"></span>
+            <div class="poll-hearts"><i>♥</i><i>♥</i><i>♥</i><i>♥</i><i>♥</i><i>♥</i><i>♥</i></div>
+            <div class="story-reply">
+              <span class="reply-field">Send message</span>
+              <svg viewBox="0 0 24 24"><path d="M12 20.5S3.5 15.2 3.5 9.2A4.7 4.7 0 0 1 12 6.4a4.7 4.7 0 0 1 8.5 2.8c0 6-8.5 11.3-8.5 11.3Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M21.5 3 10 14.5M21.5 3l-7 18-4.5-6.5L3 10z"/></svg>
+            </div>
+          </div>
+
+          <!-- 3 · the first DM thread -->
+          <div class="ip-app ig-dm">
+            <div class="dm-head">
+              <svg class="dm-back" viewBox="0 0 24 24"><path d="M15 4 7 12l8 8"/></svg>
+              <img class="ig-avatar" src="/photos/mm-17.t.webp" alt="">
+              <span class="dm-who"><b data-her-name="lower">mia</b><small>Active now</small></span>
+              <svg viewBox="0 0 24 24"><path d="M5 3.5h3.5l1.8 4.6-2.3 1.6a12 12 0 0 0 6.3 6.3l1.6-2.3 4.6 1.8V19a2 2 0 0 1-2 2A17 17 0 0 1 3 5.5a2 2 0 0 1 2-2Z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M3 7h12v10H3z"/><path d="M15 10.5 21 7v10l-6-3.5"/></svg>
+            </div>
+            <div class="dm-flow" id="dm-flow">
+              <div class="dm-card">
+                <img class="ig-avatar dm-card-avatar" src="/photos/mm-17.t.webp" alt="">
+                <b data-her-name="lower">mia</b>
+                <small>you both follow each other · met tonight on a rooftop</small>
+                <span class="dm-view">View profile</span>
+              </div>
+              <p class="dm-date">SEP 14, 2019, 11:54 PM</p>
+              <div class="dm-row">
+                <img class="ig-avatar" src="/photos/mm-17.t.webp" alt="">
+                <p class="bubble typing"><i></i><i></i><i></i></p>
+              </div>
+            </div>
+            <div class="dm-compose"><span class="dm-cam"></span>Message…</div>
+          </div>
+
+          <!-- 4 · the lock screen on our wedding day -->
+          <div class="ip-app ip-lock">
+            <svg class="lock-icon" viewBox="0 0 24 24"><path d="M5 10.5h14v10H5z"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+            <p class="lock-date">Saturday, June 7</p>
+            <p class="lock-time">07:07</p>
+            <p class="lock-widget">♥ our wedding day</p>
+            <span class="lock-btn lock-torch"></span>
+            <span class="lock-btn lock-cam"></span>
+          </div>
+
+          <span class="ip-home"></span>
+          <span class="ip-glare"></span>
+        </div>
+      </div>
+      <div class="iphone-shadow"></div>
+    </div>
+
+    <ol class="origin-steps">
+      <li><span class="eyebrow">11:52 pm · sep 14, 2019</span><b>Her story</b><span>a poll, and a rooftop still glowing</span></li>
+      <li><span class="eyebrow">11:53 pm</span><b>My yes</b><span>one tap, no overthinking</span></li>
+      <li><span class="eyebrow">11:54 pm</span><b>Her message</b><span>and then, years of them</span></li>
+      <li><span class="eyebrow">07:07 · june 7, 2025</span><b>Our day</b><span>the screen lit up for good</span></li>
+    </ol>
+  </div>
+</section>
+
+<!-- 03-numbers.html -->
+<section id="numbers" class="numbers" aria-label="Us, in numbers">
+  <div class="num-pin">
+    <div class="num-sky" aria-hidden="true"></div>
+    <div class="num-night" aria-hidden="true"></div>
+    <canvas class="num-canvas" id="num-canvas" aria-hidden="true"></canvas>
+
+    <header class="numbers-head">
+      <p class="eyebrow">#03 — Us, in numbers</p>
+      <h2 class="numbers-title">Us, <span class="script">counted</span></h2>
+      <p class="numbers-sub">seven years of messages, one star for every hundred</p>
+    </header>
+
+    <ol class="num-scenes" id="num-scenes"></ol>
+
+    <p class="num-legend" id="num-legend" aria-hidden="true"></p>
+
+    <div class="num-call" id="num-call" aria-hidden="true">
+      <img class="num-call-avatar" src="/photos/mm-19.t.webp" alt="">
+      <b><span data-her-name>Mia</span> ♥</b>
+      <span class="num-call-timer" id="num-call-timer">0:00:00</span>
+    </div>
+
+    <div class="num-progress" aria-hidden="true">
+      <span id="num-now">01</span>
+      <span class="np-line"><i id="num-bar"></i></span>
+      <span id="num-all">08</span>
+    </div>
+  </div>
+</section>
+
+<!-- 04-days.html -->
+<section id="days" class="days" aria-labelledby="days-title">
+  <header class="days-head">
+    <p class="eyebrow">#04 — A ledger of us</p>
+    <h2 class="days-title" id="days-title">A ledger <span class="script">of us</span></h2>
+    <p class="days-sub" id="days-sub" aria-live="polite">one dot for every day we talked · the bigger the dot the louder the day</p>
+    <dl class="days-facts" id="days-facts"></dl>
+    <p class="eyebrow days-marked-title">our days · hover to find them, click to open</p>
+    <ul class="marked-days" id="marked-days"></ul>
+  </header>
+
+  <article class="day-page" id="day-page" hidden tabindex="-1" aria-labelledby="dp-date"></article>
+
+  <div class="ledger" id="ledger" data-lens="loud">
+    <div class="ledger-top">
+      <p class="ledger-date" id="ledger-date">14 Sept 2019</p>
+      <p class="ledger-total"><b id="ledger-total">0</b> messages</p>
+    </div>
+    <div class="ledger-years" id="days-years"></div>
+  </div>
+
+  <aside class="day-note" id="day-note" hidden aria-hidden="true">
+    <img class="dn-photo" id="dn-photo" alt="" hidden decoding="async">
+    <p class="dn-date" id="dn-date"></p>
+    <p class="dn-count" id="dn-count"></p>
+    <p class="dn-title" id="dn-title"></p>
+    <p class="dn-meta" id="dn-meta"></p>
+    <p class="dn-hint">click to open the day</p>
+  </aside>
+</section>
+
+<!-- 05-years.html -->
+<section id="years" class="years" aria-labelledby="years-title">
+  <div class="years-pin">
+    <header class="years-head">
+      <p class="eyebrow">#05 — The years</p>
+      <h2 id="years-title" class="sr-only">The years, one at a time</h2>
+      <ol id="years-ticks" class="years-ticks" aria-hidden="true"></ol>
+    </header>
+    <div id="years-track" class="years-track"></div>
+  </div>
+</section>
+
+<!-- 06-places.html -->
+<section id="places" class="places" aria-labelledby="places-title">
+  <header class="places-head">
+    <p class="eyebrow">#06 — The places</p>
+    <h2 id="places-title" class="places-title">Where we've been</h2>
+    <p class="script places-script">every pin is a day i'd live again</p>
+    <ol id="place-list" class="place-list" aria-label="the places, in the order we went"></ol>
+  </header>
+  <div class="map-card">
+    <div id="map" class="map" role="region" aria-label="map of the places we've been"></div>
+    <p class="map-hint eyebrow">tap a heart</p>
+  </div>
+</section>
+
+<!-- 07-her.html -->
+<!-- #07 — a chapter about her: her name in the clouds, her portrait in a gold cameo, a scrapbook of prints -->
+<section id="her" class="her" aria-labelledby="her-title">
+  <header class="her-head">
+    <p class="eyebrow">#07 — Mia</p>
+    <h2 class="her-title" id="her-title" data-her-name>Mia</h2>
+    <p class="script her-script">the best thing that ever said yes to me</p>
+  </header>
+
+  <figure class="her-cameo" id="her-cameo">
+    <img class="her-cameo-frame" src="/art/gold-oval.webp" alt="" aria-hidden="true" width="880" height="1168" decoding="async">
+    <img class="her-cameo-photo" id="her-cameo-photo" alt="" decoding="async">
+    <figcaption class="script" id="her-cameo-cap"></figcaption>
+  </figure>
+
+  <div class="her-grid" id="her-grid"></div>
+</section>
+
+<!-- 08-gallery.html -->
+<!-- #08 — an infinite canvas of every photo: scroll drifts it, drag wanders it, "dive in" fills the screen -->
+<section id="gallery" class="gallery" aria-labelledby="gallery-heading">
+  <div class="gallery-pin">
+    <div class="gallery-stage" id="gallery-stage"></div>
+
+    <header class="gallery-head"><p class="eyebrow">#08 — All of us</p></header>
+
+    <div class="gallery-title">
+      <h2 id="gallery-heading"><span class="script">u</span>s</h2>
+      <p id="gallery-count"></p>
+    </div>
+
+    <div class="gallery-invite">
+      <button class="gallery-dive" id="gallery-dive" type="button" aria-label="Dive into the photos">
+        <span class="gd-ripple" aria-hidden="true"></span>
+        <span class="gd-script">dive</span>
+        <span class="gd-label">in</span>
+      </button>
+      <p class="gallery-hint">or keep scrolling · drag to wander</p>
+    </div>
+
+    <p class="gallery-dive-hint">drag · wheel · arrow keys to wander<span>esc to come back up</span></p>
+    <button class="gallery-surface" id="gallery-surface" type="button">come back up</button>
+  </div>
+</section>
+
+<!-- 09-love.html -->
+<section id="love" class="love" aria-labelledby="love-title">
+  <header class="love-head">
+    <p class="eyebrow">#09 — Every love message</p>
+    <h2 class="love-title" id="love-title">Love <span class="script">in writing</span></h2>
+    <p class="eyebrow love-meta" id="love-meta">every time we wrote it down</p>
+  </header>
+
+  <div class="love-river" id="love-river" aria-hidden="true"></div>
+
+  <button class="love-open" id="love-open" type="button" aria-haspopup="dialog" aria-controls="love-book">
+    <svg class="gift" viewBox="0 0 300 340" role="img" aria-label="a wrapped gift box" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="gift-light" cx="50%" cy="60%" r="50%">
+          <stop offset="0" stop-color="#fff4d6" stop-opacity="1" />
+          <stop offset="0.45" stop-color="#ffc9d2" stop-opacity="0.65" />
+          <stop offset="1" stop-color="#ff8fa3" stop-opacity="0" />
+        </radialGradient>
+        <linearGradient id="gift-paper" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#d92a3e" />
+          <stop offset="1" stop-color="#8c1426" />
+        </linearGradient>
+        <linearGradient id="gift-paper-lid" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#e5394c" />
+          <stop offset="1" stop-color="#b01d31" />
+        </linearGradient>
+        <linearGradient id="gift-ribbon" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#c99a3c" />
+          <stop offset="0.5" stop-color="#f3d58e" />
+          <stop offset="1" stop-color="#c99a3c" />
+        </linearGradient>
+      </defs>
+
+      <ellipse class="gift-shadow" cx="150" cy="318" rx="118" ry="13" />
+      <ellipse class="gift-glow" cx="150" cy="128" rx="140" ry="96" fill="url(#gift-light)" />
+
+      <g class="gift-base">
+        <rect x="48" y="134" width="204" height="176" rx="4" fill="url(#gift-paper)" />
+        <path d="M48 134h204v14H48z" fill="#000" fill-opacity="0.18" />
+        <g fill="#fbe3e7" fill-opacity="0.22">
+          <path d="M78 180c-4-6-13-3-11 4 2 6 11 11 11 11s9-5 11-11c2-7-7-10-11-4z" />
+          <path d="M214 228c-4-6-13-3-11 4 2 6 11 11 11 11s9-5 11-11c2-7-7-10-11-4z" />
+          <path d="M92 266c-3-5-10-2-9 3 2 5 9 9 9 9s7-4 9-9c1-5-6-8-9-3z" />
+          <path d="M222 166c-3-5-10-2-9 3 2 5 9 9 9 9s7-4 9-9c1-5-6-8-9-3z" />
+        </g>
+        <rect x="136" y="134" width="28" height="176" fill="url(#gift-ribbon)" />
+        <path d="M136 134h28v176h-28z" fill="none" stroke="#8a6420" stroke-opacity="0.35" />
+      </g>
+
+      <g class="gift-lid">
+        <rect x="38" y="98" width="224" height="38" rx="4" fill="url(#gift-paper-lid)" />
+        <rect x="134" y="98" width="32" height="38" fill="url(#gift-ribbon)" />
+        <path d="M150 96c-22-34-70-44-74-18-3 20 40 24 74 18z" fill="url(#gift-ribbon)" stroke="#8a6420" stroke-opacity="0.4" />
+        <path d="M150 96c22-34 70-44 74-18 3 20-40 24-74 18z" fill="url(#gift-ribbon)" stroke="#8a6420" stroke-opacity="0.4" />
+        <path d="M148 98c-12 10-24 26-28 40M152 98c12 10 24 26 28 40" stroke="#c99a3c" stroke-width="7" stroke-linecap="round" fill="none" />
+        <circle cx="150" cy="96" r="11" fill="#e2b75f" stroke="#8a6420" stroke-opacity="0.45" />
+        <g class="gift-tag">
+          <path d="M226 116l14 40" stroke="#c99a3c" stroke-width="1.5" />
+          <g transform="rotate(-10 236 176)">
+            <path d="M206 158h52v40h-52l-10-20z" fill="#fbf4e8" stroke="#c99a3c" stroke-opacity="0.6" />
+            <circle cx="206" cy="178" r="2.5" fill="#c99a3c" />
+            <text x="230" y="184" text-anchor="middle">for <tspan data-her-name>Mia</tspan></text>
+          </g>
+        </g>
+      </g>
+    </svg>
+    <span class="gift-cta">
+      <span class="script">open it</span>
+      <span class="eyebrow">every love message inside ✦</span>
+    </span>
+  </button>
+</section>
+
+<!-- 10-letter.html -->
+<!-- #10 — under a fresco arch, a sealed envelope; tap it and the letter unfolds -->
+<section id="letter" class="letter" aria-labelledby="letter-title">
+  <div class="arch" aria-hidden="true"></div>
+
+  <header class="letter-head">
+    <p class="eyebrow">#10 — The letter</p>
+    <h2 class="script letter-title" id="letter-title"></h2>
+  </header>
+
+  <button class="envelope" id="envelope" type="button" aria-expanded="false" aria-controls="letter-paper">
+    <img src="/art/envelope.webp" alt="" width="1168" height="880" decoding="async">
+    <span class="eyebrow">tap to open · it’s for you</span>
+  </button>
+
+  <article class="letter-paper" id="letter-paper" hidden>
+    <div class="letter-body" id="letter-body"></div>
+    <p class="script letter-sign" id="letter-sign"></p>
+  </article>
+</section>
+
+<!-- 11-thanks.html -->
+<!-- #11 — the gate of heaven: a colonnade, hairlines, and the two words this whole site is for -->
+<section id="thanks" class="thanks" aria-labelledby="thanks-title">
+  <div class="thanks-frame">
+    <p class="eyebrow thanks-small">#11 — Thank you</p>
+    <p class="eyebrow thanks-small">07 · 06 · 2025 — always</p>
+  </div>
+
+  <h2 class="thanks-title" id="thanks-title">thank you</h2>
+  <p class="script thanks-line">for marrying me</p>
+  <p class="thanks-quote">for the rooftop, the bridge, the tiny kitchen, the yes in vienna, the garden, the sea — and for every ordinary tuesday in between. i would choose you in every one of them, again and again.</p>
+  <p class="eyebrow thanks-sign">— mark · our first anniversary</p>
+  <p class="thanks-count" id="thanks-count" hidden></p>
+</section>

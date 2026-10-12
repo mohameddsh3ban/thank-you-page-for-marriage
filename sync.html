@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lyric sync — dev tool</title>
+<style>
+  body { margin: 0; background: #0B0607; color: #EFE6D6; font: 14px/1.5 'JetBrains Mono', monospace; padding: 24px; }
+  h1 { color: #C1121F; font-size: 18px; text-transform: uppercase; letter-spacing: .1em; }
+  .bar { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-bottom: 16px; position: sticky; top: 0; background: #0B0607; padding: 10px 0; }
+  button { font: inherit; background: #C1121F; color: #EFE6D6; border: 0; padding: 8px 14px; cursor: pointer; }
+  button.ghost { background: none; border: 1px solid #EFE6D6; }
+  #time { font-size: 22px; min-width: 90px; }
+  ol { padding-left: 0; list-style: none; }
+  li { display: grid; grid-template-columns: 80px 1fr; gap: 12px; padding: 4px 8px; border-left: 3px solid transparent; }
+  li.active { border-left-color: #C1121F; background: #2A0710; }
+  li.next { border-left-color: #EFE6D6; }
+  li .t { opacity: .85; cursor: pointer; }
+  p.help { opacity: .9; max-width: 760px; }
+  #status { color: #F2C14E; }
+</style>
+</head>
+<body>
+<h1>Lyric sync</h1>
+<p class="help">
+  <b>Check mode:</b> press Play and watch the red line; it should land as each line is sung.
+  If everything is early/late by the same amount, use −/+ 0.1s to shift all lines.<br>
+  <b>Re-time mode:</b> press <b>R</b> (restarts the song), then tap <b>Space</b> exactly when each line starts.
+  Click a timestamp to jump there. Press <b>Save</b> when happy — it writes public/lyrics.lrc (backup kept as .bak).<br>
+  <b>No .lrc yet?</b> Run <code>npm run lyrics</code>, or paste the words below (one line per row), press <b>Use pasted</b>, then <b>R</b>.
+  Needs your song at the <code>CONFIG.song.mp3</code> path (public/audio/, git-ignored).
+</p>
+<details><summary>paste lyrics</summary><textarea id="paste" rows="10" cols="70"></textarea><br><button class="ghost" id="use-paste">Use pasted</button></details>
+<div class="bar">
+  <button id="play">Play</button>
+  <span id="time">0.00</span>
+  <button class="ghost" id="minus">−0.1s all</button>
+  <button class="ghost" id="plus">+0.1s all</button>
+  <button class="ghost" id="retime">R  re-time from start</button>
+  <button id="save">Save</button>
+  <span id="status"></span>
+</div>
+<ol id="lines"></ol>
+<audio id="audio" preload="auto"></audio>
+<script type="module">
+import { parseLrc, lineAt } from '/src/lyrics.js';
+import { CONFIG } from '/src/config.js';
+const audio = document.getElementById('audio');
+audio.src = CONFIG.song.mp3 || '';
+audio.addEventListener('error', () => status(`no audio at ${CONFIG.song.mp3} — drop your mp3 there first`));
+const list = document.getElementById('lines');
+async function loadLrc() {
+  const res = await fetch(CONFIG.song.lyricsUrl || '/lyrics.lrc', { cache: 'no-store' });
+  if (!res.ok || (res.headers.get('content-type') || '').includes('text/html')) return [];
+  return parseLrc(await res.text());
+}
+let lines = await loadLrc();
+if (!lines.length) setTimeout(() => status('no lyrics file yet: paste the words above, or run npm run lyrics'));
+document.getElementById('use-paste').onclick = () => {
+  lines = document.getElementById('paste').value.split(/\r?\n/).map(t => t.trim()).filter(Boolean).map(text => ({ t: 0, text }));
+  draw(); status(`${lines.length} lines — press R and tap Space at each line start`);
+};
+let retiming = false, cursor = 0;
+
+const fmt = t => {
+  const m = Math.floor(t / 60), s = (t - m * 60).toFixed(2).padStart(5, '0');
+  return `${String(m).padStart(2, '0')}:${s}`;
+};
+function draw() {
+  list.innerHTML = '';
+  lines.forEach((l, i) => {
+    const li = document.createElement('li');
+    const t = document.createElement('span'); t.className = 't'; t.textContent = fmt(l.t);
+    t.onclick = () => { audio.currentTime = Math.max(0, l.t - 1.5); audio.play(); };
+    const x = document.createElement('span'); x.textContent = l.text || '♪';
+    li.append(t, x); list.append(li);
+  });
+}
+function tick() {
+  document.getElementById('time').textContent = audio.currentTime.toFixed(2);
+  const i = lineAt(lines, audio.currentTime);
+  [...list.children].forEach((li, j) => {
+    li.classList.toggle('active', !retiming && j === i);
+    li.classList.toggle('next', retiming && j === cursor);
+  });
+  requestAnimationFrame(tick);
+}
+const shift = d => { lines = lines.map(l => ({ ...l, t: Math.max(0, +(l.t + d).toFixed(2)) })); draw(); };
+document.getElementById('play').onclick = () => audio.paused ? audio.play() : audio.pause();
+document.getElementById('minus').onclick = () => shift(-0.1);
+document.getElementById('plus').onclick = () => shift(0.1);
+const startRetime = () => { retiming = true; cursor = 0; audio.currentTime = 0; audio.play(); status('re-timing: tap Space at each line start'); };
+document.getElementById('retime').onclick = startRetime;
+document.addEventListener('keydown', e => {
+  if (e.key === 'r' || e.key === 'R') startRetime();
+  if (e.code === 'Space') {
+    e.preventDefault();
+    if (!retiming) { audio.paused ? audio.play() : audio.pause(); return; }
+    lines = lines.map((l, i) => i === cursor ? { ...l, t: +audio.currentTime.toFixed(2) } : l);
+    cursor += 1; draw();
+    if (cursor >= lines.length) { retiming = false; status('done — check it, then Save'); }
+  }
+});
+function status(s) { document.getElementById('status').textContent = s; }
+document.getElementById('save').onclick = async () => {
+  const body = lines.map(l => `[${fmt(l.t)}] ${l.text}`).join('\n') + '\n';
+  const r = await fetch('/__save-lyrics', { method: 'POST', body });
+  status(r.ok ? 'saved to public/lyrics.lrc' : 'save failed: ' + await r.text());
+};
+draw(); tick();
+</script>
+</body>
+</html>

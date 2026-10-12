@@ -1,0 +1,287 @@
+/* #02 — How it started. Pinned scroll story on an iPhone (blue titanium, Dynamic Island), the night
+   after the rooftop party: 1 her Close Friends story with a "send the photo?" poll · 2 my tap on YES ·
+   3 her message arrives through the Dynamic Island and the first DM thread opens, then years of
+   messages race by · 4 the lock screen lights up at 07:07 on our wedding day. */
+.origin { background: var(--paper) var(--wash); color: var(--navy); padding: 0 !important; }
+.origin::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse at 50% 55%, rgb(239 195 204 / 0.55), transparent 55%), radial-gradient(ellipse at 85% 15%, rgb(201 218 243 / 0.6), transparent 50%);
+}
+.origin-pin {
+  position: relative; min-height: 100svh; isolation: isolate;
+  display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 72px);
+  padding: calc(var(--frame-inset) + 48px) var(--gutter);
+}
+
+/* a giant handwritten "send it?" drifting behind the phone */
+.origin-ghost {
+  position: absolute; z-index: -1; left: 50%; top: 50%; margin: 0; white-space: nowrap; pointer-events: none;
+  font: 400 clamp(180px, 21vw, 360px)/1 var(--font-script); color: var(--blush); opacity: 0.42;
+  translate: -50% -52%; rotate: -7deg;
+}
+
+/* ---- left: the date ---- */
+.origin-head .eyebrow { color: var(--navy); }
+.origin-title span { display: block; }
+.origin-title { margin: 6px 0 0; font: 400 clamp(110px, 15vw, 250px)/0.8 var(--font-display); text-transform: uppercase; color: var(--navy); }
+.origin-script { font-size: clamp(30px, 3.6vw, 54px); margin-top: 8px; color: var(--red); }
+.origin-note { margin: 18px 0 0; max-width: 30ch; font: italic 400 clamp(14px, 1.1vw, 17px)/1.5 var(--font-serif); color: color-mix(in srgb, var(--navy) 78%, transparent); }
+
+/* ---- the iPhone ---- */
+.iphone-stage {
+  --pw: min(clamp(260px, 22vw, 340px), calc((100svh - 140px) / 2.05));
+  position: relative; perspective: 1500px; animation: phone-float 7s ease-in-out infinite;
+}
+@keyframes phone-float { 50% { translate: 0 -10px; } }
+/* a soft blush halo behind the phone that blooms on our day */
+.iphone-stage::before {
+  content: ''; position: absolute; z-index: 0; left: 50%; top: 50%; width: 190%; aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(closest-side, rgb(255 255 255 / 0.55), rgb(239 195 204 / 0.35) 45%, transparent 75%);
+  opacity: 0.7; scale: 0.9; transition: opacity 1.4s, scale 1.8s var(--ease-out);
+}
+.origin.s4 .iphone-stage::before { opacity: 1; scale: 1.08; }
+/* the hero's spark, twinkling around the phone once it's official */
+.origin-sparkles { position: absolute; inset: -8% -30%; z-index: 2; pointer-events: none; }
+.origin-sparkles svg { position: absolute; width: var(--s, 18px); fill: #fffaf0; opacity: 0; scale: 0.2;
+  filter: drop-shadow(0 0 4px #fff) drop-shadow(0 0 12px rgb(255 255 255 / 0.9)) drop-shadow(0 0 22px rgb(195 24 43 / 0.45)); }
+.origin.s4 .origin-sparkles svg { animation: sparkle 2.6s ease-in-out var(--d, 0s) infinite; }
+@keyframes sparkle { 0%, 100% { opacity: 0; scale: 0.2; rotate: 0deg; } 40%, 60% { opacity: 1; scale: 1; rotate: 45deg; } }
+.iphone {
+  position: relative; z-index: 1; width: var(--pw); aspect-ratio: 71.6 / 146.6;
+  border-radius: calc(var(--pw) * 0.175); padding: calc(var(--pw) * 0.013);
+  /* blue titanium: brushed band with soft highlights at the corners */
+  background:
+    linear-gradient(90deg, #2d3445 0%, #59637a 6%, #3a4254 14%, #3a4254 86%, #5b657c 94%, #2b3242 100%),
+    #3a4254;
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.22), inset 0 1px 1px rgb(255 255 255 / 0.35),
+    0 1px 0 rgb(255 255 255 / 0.2), 0 40px 70px -30px rgb(26 34 54 / 0.65), 0 18px 30px -18px rgb(26 34 54 / 0.45);
+  transform-style: preserve-3d; will-change: transform;
+}
+.ip-btn { position: absolute; width: 3px; border-radius: 2px; background: linear-gradient(90deg, #232938, #5b657c 60%, #2d3445); }
+.ip-action { left: -2.5px; top: 17%; height: 4.6%; }
+.ip-vol-up { left: -2.5px; top: 25%; height: 8.4%; }
+.ip-vol-down { left: -2.5px; top: 35.5%; height: 8.4%; }
+.ip-power { right: -2.5px; top: 29%; height: 13%; background: linear-gradient(270deg, #232938, #5b657c 60%, #2d3445); }
+
+.ip-screen {
+  position: relative; height: 100%; overflow: hidden; container-type: inline-size; isolation: isolate;
+  border: calc(var(--pw) * 0.026) solid #050608; border-radius: calc(var(--pw) * 0.16);
+  background: #000; color: #fff; font-family: var(--font-body);
+}
+
+/* status bar */
+.ip-status {
+  position: absolute; z-index: 20; left: 0; right: 0; top: 0; height: 12.5cqw; padding: 0 7.5cqw 0 9cqw;
+  display: flex; align-items: center; justify-content: space-between; font: 600 4.3cqw/1 var(--font-body); letter-spacing: 0.01em;
+  transition: color 0.5s;
+}
+.ip-icons { display: inline-flex; align-items: center; gap: 1.6cqw; }
+.ip-icons svg { height: 3.1cqw; width: auto; fill: currentColor; }
+.ip-battery { position: relative; width: 6.6cqw; height: 3.2cqw; border: 1px solid rgb(255 255 255 / 0.45); border-radius: 1.1cqw; padding: 0.45cqw; }
+.ip-battery::after { content: ''; position: absolute; right: -1.2cqw; top: 30%; width: 0.7cqw; height: 40%; border-radius: 0 1px 1px 0; background: rgb(255 255 255 / 0.45); }
+.ip-battery i { display: block; height: 100%; width: 78%; border-radius: 0.5cqw; background: currentColor; }
+
+/* Dynamic Island — becomes her message notification on beat 3 */
+.ip-island {
+  position: absolute; z-index: 30; left: 50%; top: 3cqw; translate: -50% 0; width: 31cqw; height: 9.4cqw; border-radius: 99px;
+  background: #000; display: flex; align-items: center; gap: 2.6cqw; padding: 0 2.4cqw; overflow: hidden;
+  box-shadow: 0 0 0 0.6px rgb(255 255 255 / 0.06);
+}
+.ip-island::after { /* the front camera */
+  content: ''; position: absolute; right: 5cqw; top: 50%; width: 2.6cqw; height: 2.6cqw; translate: 0 -50%; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #2b3a5c, #090b12 60%); transition: opacity 0.2s;
+}
+.ip-island > * { opacity: 0; }
+.isl-avatar { width: 11cqw; height: 11cqw; flex: none; border-radius: 50%; object-fit: cover; object-position: 50% 35%; }
+.isl-text { display: grid; gap: 0.6cqw; font: 400 3.4cqw/1.1 var(--font-body); color: rgb(255 255 255 / 0.7); white-space: nowrap; }
+.isl-text b { font-weight: 600; font-size: 3.8cqw; color: #fff; }
+.isl-app { margin-left: auto; width: 7cqw; height: 7cqw; flex: none; border-radius: 2cqw; background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fd5949 45%, #d6249f 60%, #285aeb 90%); position: relative; }
+.isl-app::after { content: ''; position: absolute; inset: 1.5cqw; border: 0.55cqw solid #fff; border-radius: 1.6cqw; box-shadow: inset 0 0 0 1.2cqw transparent; }
+
+.origin.s3 .ip-island { animation: island-notify 3.2s cubic-bezier(0.32, 0.72, 0, 1) both; }
+.origin.s3 .ip-island > * { animation: island-content 3.2s ease both; }
+.origin.s3 .ip-island::after { opacity: 0; transition-delay: 0s; }
+.origin.s4 .ip-island::after { opacity: 1; }
+@keyframes island-notify {
+  0% { width: 31cqw; height: 9.4cqw; top: 3cqw; border-radius: 99px; }
+  14%, 74% { width: 92cqw; height: 18cqw; top: 2.4cqw; border-radius: 9cqw; }
+  100% { width: 31cqw; height: 9.4cqw; top: 3cqw; border-radius: 99px; }
+}
+@keyframes island-content { 0%, 10% { opacity: 0; } 20%, 66% { opacity: 1; } 76%, 100% { opacity: 0; } }
+
+/* the three app screens, stacked */
+.ip-app { position: absolute; inset: 0; transition: opacity 0.7s, transform 0.9s var(--ease-out), filter 0.7s; }
+.ig-avatar { display: block; flex: none; aspect-ratio: 1; object-fit: cover; object-position: 50% 35%; border-radius: 50%; background: #333; }
+
+/* 1–2 · her story */
+.ig-story { z-index: 1; display: flex; flex-direction: column; background: radial-gradient(ellipse at 50% 38%, #34406a, #151b2e 62%, #07090f); }
+.story-bars { display: flex; gap: 0.9cqw; padding: 14cqw 3cqw 0; }
+.story-bars i { flex: 1; height: 0.7cqw; background: rgb(255 255 255 / 0.35); border-radius: 1cqw; overflow: hidden; position: relative; }
+.story-bars i::after { content: ''; position: absolute; inset: 0; background: #fff; transform: scaleX(var(--p, 0)); transform-origin: left; }
+.story-top { display: flex; align-items: center; gap: 2.4cqw; padding: 3cqw 3.4cqw; font: 600 3.9cqw/1 var(--font-body); }
+/* close friends ring: green ring, a thin dark gap, then her photo (the img is pinned inside so it can never stretch) */
+.cf-ring { position: relative; width: 9cqw; height: 9cqw; flex: none; border-radius: 50%; background: #20c65f; }
+.cf-ring img { position: absolute; inset: 0.6cqw; width: calc(100% - 1.2cqw); height: calc(100% - 1.2cqw); border: 0.6cqw solid #151b2e; box-sizing: border-box; }
+.story-user em { font-style: normal; font-weight: 400; color: rgb(255 255 255 / 0.65); margin-left: 1cqw; }
+.cf-badge {
+  margin-left: auto; display: inline-flex; align-items: center; gap: 1cqw; white-space: nowrap;
+  background: #20c65f; color: #fff; font: 600 3.1cqw/1 var(--font-body); padding: 1.4cqw 2.4cqw; border-radius: 99px;
+}
+.cf-badge svg { width: 2.6cqw; fill: #fff; }
+.story-art { flex: 1; width: 100%; min-height: 0; }
+
+/* the poll sticker */
+.poll {
+  position: absolute; z-index: 3; left: 13%; right: 13%; top: 54%; padding: 4.4cqw 3.6cqw 3.6cqw; border-radius: 4.5cqw;
+  background: #fff; color: #111; text-align: center; rotate: -3deg; box-shadow: 0 3cqw 8cqw rgb(0 0 0 / 0.4);
+}
+.poll-q { margin: 0 0 3.2cqw; font: 700 5cqw/1.15 var(--font-body); }
+.poll-opts { display: grid; gap: 2cqw; }
+.poll-opt {
+  position: relative; overflow: hidden; display: flex; justify-content: space-between; align-items: center;
+  padding: 2.6cqw 4cqw; border-radius: 99px; background: #efefef; font: 700 4cqw/1 var(--font-body);
+}
+.poll-opt b { position: relative; z-index: 1; transition: color 0.4s 0.35s; }
+.poll-pct { position: relative; z-index: 1; font-style: normal; font-weight: 600; opacity: 0; transition: opacity 0.5s 0.5s, color 0.4s 0.35s; }
+.poll-fill { position: absolute; inset: 0; background: linear-gradient(90deg, #d62976, #fa7e1e); transform: scaleX(0); transform-origin: left; transition: transform 1.1s var(--ease-out) 0.25s; }
+.poll-opt.no .poll-fill { display: none; }
+.origin.s2 .poll-opt.yes .poll-fill { transform: scaleX(1); }
+.origin.s2 .poll-opt.yes b, .origin.s2 .poll-opt.yes .poll-pct { color: #fff; }
+.origin.s2 .poll-pct { opacity: 1; }
+.tap { position: absolute; left: 50%; top: 50%; width: 14cqw; height: 14cqw; margin: -7cqw 0 0 -7cqw; border-radius: 50%; background: rgb(255 255 255 / 0.9); opacity: 0; pointer-events: none; z-index: 2; }
+.origin.s2 .tap { animation: tap 0.8s ease-out both; }
+@keyframes tap { 0% { opacity: 0.7; scale: 0.3; } 100% { opacity: 0; scale: 1.8; } }
+.poll-hearts { position: absolute; left: 30%; top: 58%; pointer-events: none; }
+.poll-hearts i { position: absolute; font: 400 6cqw/1 serif; font-style: normal; color: #ff3b5c; opacity: 0; text-shadow: 0 1cqw 3cqw rgb(255 59 92 / 0.45); }
+.origin.s2 .poll-hearts i { animation: heart-fly 1.7s cubic-bezier(0.2, 0.7, 0.3, 1) both; }
+.poll-hearts i:nth-child(1) { --dx: -16cqw; --r: -24deg; animation-delay: 0.30s !important; }
+.poll-hearts i:nth-child(2) { --dx: -6cqw; --r: -8deg; animation-delay: 0.38s !important; font-size: 8cqw; }
+.poll-hearts i:nth-child(3) { --dx: 4cqw; --r: 10deg; animation-delay: 0.34s !important; }
+.poll-hearts i:nth-child(4) { --dx: 14cqw; --r: 22deg; animation-delay: 0.45s !important; font-size: 5cqw; }
+.poll-hearts i:nth-child(5) { --dx: 24cqw; --r: 30deg; animation-delay: 0.52s !important; }
+.poll-hearts i:nth-child(6) { --dx: -24cqw; --r: -32deg; animation-delay: 0.58s !important; font-size: 4.5cqw; }
+.poll-hearts i:nth-child(7) { --dx: 34cqw; --r: 18deg; animation-delay: 0.62s !important; font-size: 7cqw; }
+@keyframes heart-fly {
+  0% { opacity: 0; transform: translate(0, 0) scale(0.3) rotate(0); }
+  15% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--dx), -48cqw) scale(1.15) rotate(var(--r)); }
+}
+
+.story-reply { position: absolute; left: 3.4cqw; right: 3.4cqw; bottom: 8cqw; display: flex; align-items: center; gap: 3.4cqw; }
+.reply-field { flex: 1; padding: 2.8cqw 4.4cqw; border: 1px solid rgb(255 255 255 / 0.55); border-radius: 99px; font: 400 3.7cqw/1 var(--font-body); color: rgb(255 255 255 / 0.85); }
+.story-reply svg { width: 6.4cqw; flex: none; fill: none; stroke: #fff; stroke-width: 1.8; stroke-linejoin: round; }
+
+/* 3 · the first DM thread */
+.ig-dm { z-index: 2; background: #000; opacity: 0; transform: translateX(14%); }
+.dm-head { display: flex; align-items: center; gap: 2.6cqw; padding: 13cqw 4cqw 3cqw; border-bottom: 1px solid #1c1c1c; }
+.dm-head svg { width: 6.2cqw; flex: none; fill: none; stroke: #fff; stroke-width: 1.7; stroke-linejoin: round; stroke-linecap: round; }
+.dm-head .dm-back { width: 6.6cqw; stroke-width: 2.2; }
+.dm-head > img { width: 8.6cqw; height: 8.6cqw; flex: none; }
+.dm-who { display: grid; gap: 0.5cqw; margin-right: auto; font: 600 3.9cqw/1.1 var(--font-body); }
+.dm-who small { font-weight: 400; font-size: 3cqw; color: #a8a8a8; }
+.dm-card { display: grid; justify-items: center; gap: 1.2cqw; padding: 0 2cqw; text-align: center; flex: none; }
+.dm-card-avatar { width: 23cqw; height: 23cqw; margin-bottom: 2cqw; }
+.dm-card b { font: 600 4.8cqw/1.1 var(--font-body); }
+.dm-card small { font: 400 3.2cqw/1.3 var(--font-body); color: #a8a8a8; }
+.dm-view { margin-top: 2.6cqw; padding: 2cqw 4.2cqw; border-radius: 2.4cqw; background: #262626; font: 600 3.4cqw/1 var(--font-body); }
+.dm-date { flex: none; margin: 7cqw 0 2cqw; text-align: center; font: 600 2.9cqw/1 var(--font-body); letter-spacing: 0.02em; color: #8a8a8a; }
+.dm-row { flex: none; display: flex; align-items: flex-end; gap: 2.2cqw; opacity: 0; transform: translateY(4cqw); transition: opacity 0.5s, transform 0.6s var(--ease-out); }
+.dm-row img { width: 7cqw; height: 7cqw; flex: none; }
+.bubble.typing { margin: 0; display: inline-flex; gap: 1.2cqw; align-items: center; padding: 3.6cqw 4.6cqw; border-radius: 6cqw; background: #262626; }
+.bubble.typing i { width: 2cqw; height: 2cqw; border-radius: 50%; background: #9a9a9a; animation: typing 1.2s infinite ease-in-out; }
+.bubble.typing i:nth-child(2) { animation-delay: 0.15s; }
+.bubble.typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes typing { 0%, 60%, 100% { transform: translateY(0); opacity: 0.45; } 30% { transform: translateY(-1cqw); opacity: 1; } }
+/* the thread is anchored to the bottom like a real chat: new messages push everything above them up */
+.dm-flow {
+  position: absolute; left: 0; right: 0; top: 26cqw; bottom: 21cqw; padding: 0 3.6cqw 1cqw;
+  display: flex; flex-direction: column; justify-content: flex-end; gap: 1.3cqw; overflow: hidden;
+  mask-image: linear-gradient(transparent, #000 9%); -webkit-mask-image: linear-gradient(transparent, #000 9%);
+}
+.dm-flow.is-flowing .dm-row { display: none; }
+.msg { display: none; flex: none; position: relative; margin: 0; max-width: 72%; padding: 2.5cqw 3.8cqw; border-radius: 5cqw; font: 400 3.6cqw/1.28 var(--font-body); overflow-wrap: anywhere; }
+.msg.is-in { display: block; animation: msg-in 0.32s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.msg.from-her { align-self: flex-start; margin-left: 9cqw; background: #262626; color: #fff; }
+.msg.from-her.tail::before { /* her avatar sits beside the last bubble of each run */
+  content: ''; position: absolute; left: -9cqw; bottom: 0; width: 7cqw; height: 7cqw; border-radius: 50%; background: #333 var(--her-avatar) 50% 35% / cover;
+}
+.msg.from-me { align-self: flex-end; color: #fff; background: linear-gradient(140deg, #8a3ffc, #4f6cf7 55%, #3797f0); }
+.msg.from-me.tail { border-bottom-right-radius: 1.6cqw; }
+.msg.from-her.tail { border-bottom-left-radius: 1.6cqw; }
+.chip { display: none; flex: none; align-self: center; margin: 2.2cqw 0 0.6cqw; font: 600 2.8cqw/1 var(--font-body); color: #8a8a8a; letter-spacing: 0.02em; }
+.chip.is-in { display: block; animation: msg-in 0.32s ease-out; }
+@keyframes msg-in { from { opacity: 0; transform: translateY(3cqw) scale(0.94); } }
+.dm-compose {
+  position: absolute; left: 3cqw; right: 3cqw; bottom: 7.5cqw; height: 11.5cqw; padding: 0 1.6cqw; border-radius: 99px; background: #262626;
+  display: flex; align-items: center; gap: 3cqw; font: 400 3.8cqw/1 var(--font-body); color: #a8a8a8;
+}
+.dm-cam { width: 8.4cqw; height: 8.4cqw; border-radius: 50%; background: #3797f0; position: relative; }
+.dm-cam::after { content: ''; position: absolute; inset: 2.6cqw 2.2cqw; border: 0.55cqw solid #fff; border-radius: 1cqw; }
+
+/* beat 3: her notification lands first, then the thread opens */
+.origin.s3 .ig-story { opacity: 0; transform: scale(0.94); filter: blur(4px); transition-delay: 1.5s; }
+.origin.s3 .ig-dm { opacity: 1; transform: none; transition-delay: 1.5s; }
+.origin.s3 .dm-row { opacity: 1; transform: none; transition-delay: 2.2s; }
+.origin.s3 .iphone { animation: buzz 0.5s linear 0.25s both; }
+@keyframes buzz { 0%, 100% { translate: 0 0; } 15%, 55% { translate: -2px 0; } 35%, 75% { translate: 2px 0; } }
+
+/* 4 · the lock screen at 07:07 */
+.ip-lock {
+  z-index: 0; opacity: 0; display: grid; justify-items: center; align-content: start; text-align: center; /* under the apps: revealed as the DM swipes home */
+  /* our photo as the wallpaper, darkened a touch at the top and bottom so the clock and buttons read */
+  background: linear-gradient(rgb(10 12 20 / 0.42), rgb(10 12 20 / 0.08) 38%, rgb(10 12 20 / 0) 60%, rgb(10 12 20 / 0.4)), url('/photos/mm-28.webp') 50% 30% / cover;
+  text-shadow: 0 0.6cqw 3cqw rgb(26 34 54 / 0.35);
+}
+.lock-icon { width: 5.4cqw; margin-top: 14.5cqw; fill: none; stroke: #fff; stroke-width: 1.8; }
+.lock-date { margin: 2.4cqw 0 0; font: 600 4.6cqw/1 var(--font-body); color: rgb(255 255 255 / 0.92); }
+.lock-time { margin: 0.5cqw 0 0; font: 500 30cqw/0.9 var(--font-display); letter-spacing: 0.01em; color: #fff; }
+.lock-widget {
+  margin: 4cqw 0 0; padding: 2cqw 4cqw; border-radius: 99px; font: 600 3.6cqw/1 var(--font-body); color: #fff;
+  background: rgb(255 255 255 / 0.2); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+}
+.lock-btn { position: absolute; bottom: 9cqw; width: 12cqw; height: 12cqw; border-radius: 50%; background: rgb(26 34 54 / 0.35); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); }
+.lock-torch { left: 11cqw; }
+.lock-cam { right: 11cqw; }
+.lock-btn::after { content: ''; position: absolute; inset: 3.6cqw 3.9cqw; border: 0.5cqw solid #fff; border-radius: 1cqw; }
+.lock-torch::after { inset: 3cqw 4.5cqw; border-radius: 0.8cqw 0.8cqw 1.6cqw 1.6cqw; }
+.origin.s4 .ip-lock { opacity: 1; transition: opacity 0.35s ease; }
+/* the app swipes home: it shrinks toward the bottom of the screen and the wallpaper takes over */
+.origin.s4 .ig-dm { opacity: 0; transform: translateY(34%) scale(0.28); border-radius: 12cqw; filter: none; transition: transform 0.65s cubic-bezier(0.3, 0.7, 0, 1), opacity 0.45s ease 0.2s, border-radius 0.65s; transition-delay: 0s; }
+.origin.s4 .ip-status { color: #fff; }
+.ip-time { transition: opacity 0.4s; }
+.origin.s4 .ip-time { opacity: 0; } /* iOS hides the small clock on the lock screen */
+
+.ip-home { position: absolute; z-index: 25; left: 50%; bottom: 2.4cqw; width: 35cqw; height: 1.4cqw; translate: -50% 0; border-radius: 1cqw; background: rgb(255 255 255 / 0.88); }
+.ip-glare {
+  position: absolute; z-index: 40; inset: -20%; pointer-events: none; mix-blend-mode: screen;
+  background: linear-gradient(115deg, transparent 38%, rgb(255 255 255 / 0.09) 47%, rgb(255 255 255 / 0.02) 53%, transparent 60%);
+  transform: translateX(var(--glare, -30%));
+}
+.iphone-shadow {
+  position: absolute; z-index: 0; left: 12%; right: 12%; bottom: -5%; height: 6%; border-radius: 50%;
+  background: radial-gradient(closest-side, rgb(26 34 54 / 0.35), transparent); filter: blur(6px);
+}
+
+/* ---- right: the story as a timeline, a rose rail filling as she scrolls ---- */
+.origin-steps { position: relative; list-style: none; margin: 0; padding: 4px 0 4px 34px; display: grid; gap: clamp(22px, 3.4vh, 38px); }
+.origin-steps::before, .origin-steps::after { content: ''; position: absolute; left: 6px; top: 10px; bottom: 10px; width: 1px; }
+.origin-steps::before { background: color-mix(in srgb, var(--navy) 22%, transparent); }
+.origin-steps::after { background: var(--red); transform: scaleY(var(--rail, 0)); transform-origin: top; }
+.origin-steps li { position: relative; display: grid; gap: 3px; opacity: 0.22; transition: opacity 0.6s, translate 0.7s var(--ease-out); }
+.origin-steps li::before {
+  content: ''; position: absolute; left: -33px; top: 0.35em; width: 11px; height: 11px; border-radius: 50%; z-index: 1;
+  background: var(--paper); border: 1px solid color-mix(in srgb, var(--navy) 45%, transparent); transition: background 0.4s, border-color 0.4s, scale 0.4s;
+}
+.origin-steps li.is-reached { opacity: 0.5; }
+.origin-steps li.is-reached::before { background: var(--red); border-color: var(--red); }
+.origin-steps li.is-current { opacity: 1; translate: 8px 0; }
+.origin-steps li.is-current::before { scale: 1.35; box-shadow: 0 0 0 5px rgb(195 24 43 / 0.14); }
+.origin-steps .eyebrow { color: var(--navy); opacity: 0.8; }
+.origin-steps b { font: 400 clamp(34px, 3.6vw, 54px)/0.95 var(--font-display); text-transform: uppercase; color: var(--navy); }
+.origin-steps li > span:last-child { font: 400 clamp(20px, 2vw, 28px)/1 var(--font-script); color: var(--red); }
+
+@media (prefers-reduced-motion: reduce) {
+  .iphone-stage { animation: none; }
+  .origin-steps li { opacity: 1; }
+}

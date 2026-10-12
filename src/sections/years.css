@@ -1,0 +1,85 @@
+/* #05 — pinned horizontal scroll through the years, paper ground, red hairlines, moon fills */
+.years { background: var(--paper) var(--wash); color: var(--navy); padding: 0 !important; overflow: hidden; }
+.years::before { content: ''; position: absolute; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 15% 85%, rgb(239 195 204 / 0.45), transparent 50%); }
+.years-pin { position: relative; height: 100svh; display: grid; grid-template-rows: auto 1fr; overflow: hidden; }
+.years-head { display: flex; align-items: center; gap: 18px; padding: calc(var(--frame-inset) + 22px) var(--gutter) 10px; }
+.years-head .eyebrow { color: var(--navy); white-space: nowrap; }
+.years-ticks { list-style: none; margin: 0; padding: 0; flex: 1; display: flex; justify-content: space-between; border-top: 1px solid rgb(43 55 84 / 0.3); }
+.years-ticks li { position: relative; padding-top: 6px; font: 600 11px var(--font-label); letter-spacing: 0.1em; opacity: 0.45; transition: opacity 0.3s, color 0.3s; }
+.years-ticks li::before { content: ''; position: absolute; top: -4px; left: 0; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+.years-ticks li.is-on { opacity: 1; color: var(--red); }
+
+.years-track { display: flex; height: 100%; will-change: transform; }
+.year-panel {
+  flex: 0 0 100vw; height: 100%; padding: 8px var(--gutter) calc(var(--frame-inset) + 120px);
+  display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(20px, 3vw, 48px); align-items: center;
+  border-right: 1px solid rgb(43 55 84 / 0.18);
+}
+.yp-text { display: grid; gap: 10px; align-content: center; }
+.yp-year {
+  margin: 0; font: 400 clamp(130px, 17vw, 280px)/0.8 var(--font-display); color: var(--navy); letter-spacing: 0.01em;
+}
+.yp-title-row { display: flex; align-items: center; gap: 14px; }
+.yp-title { margin: 0; font: 400 clamp(30px, 3.2vw, 50px)/0.95 var(--font-serif); font-style: italic; }
+.moon { width: 38px; height: 38px; flex: none; }
+.yp-line { margin: 0; font: 400 clamp(22px, 2.4vw, 32px)/1.1 var(--font-script); color: var(--red); }
+.yp-moments { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 7px; }
+.yp-moments li { display: grid; grid-template-columns: 82px 1fr; gap: 10px; font: 400 15px/1.35 var(--font-body); border-top: 1px solid rgb(43 55 84 / 0.14); padding-top: 7px; }
+.yp-moments time { font: 600 11px/1.9 var(--font-label); letter-spacing: 0.1em; color: var(--red); }
+
+.yp-photos { position: relative; height: min(68svh, 640px); display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(3, 1fr); gap: 8px; }
+.yp-photo { position: relative; margin: 0; overflow: hidden; background: var(--sky-soft); box-shadow: 0 14px 30px -18px rgb(26 34 54 / 0.6); }
+.yp-photo:nth-child(1) { grid-column: span 2; grid-row: span 2; }
+.yp-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1.2s var(--ease-out); }
+.yp-photo:hover img { transform: scale(1.05); }
+.yp-photo figcaption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 10px 8px; color: #fff;
+  background: linear-gradient(transparent, rgb(0 0 0 / 0.55)); font: 400 18px/1 var(--font-script);
+}
+
+@media (max-width: 860px) {
+  .year-panel { grid-template-columns: 1fr; grid-template-rows: auto 1fr; align-items: start; padding-bottom: calc(var(--frame-inset) + 112px); }
+  .yp-year { font-size: clamp(84px, 26vw, 140px); }
+  .yp-moments li:nth-child(n+5) { display: none; }
+  .yp-photos { height: 100%; min-height: 0; grid-template-columns: repeat(2, 1fr); grid-template-rows: none; grid-auto-rows: 1fr; }
+  .yp-photo:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+  .yp-photo:nth-child(n+4) { display: none; }
+  .years-ticks li { font-size: 0; }
+}
+@media (max-width: 860px) and (max-height: 760px) { .yp-moments li:nth-child(n+4) { display: none; } }
+.yp-photo video { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* keepsakes for a year without photos: the cover photo framed in gold, a museum label under it,
+   roses spilling over, and the other photos taped around it as prints */
+.yp-memento { grid-column: 1 / -1; grid-row: 1 / -1; position: relative; margin: 0; justify-self: center; align-self: center; height: 92%; aspect-ratio: 880 / 1168; z-index: 2; }
+.is-keepsake .yp-memento { height: 84%; align-self: start; margin-top: 1%; }
+.yp-mat {
+  position: absolute; left: 19.6%; right: 19.8%; top: 17.6%; bottom: 18.9%; z-index: 2;
+  display: grid; place-content: center; gap: 10px; text-align: center; background: var(--paper); box-shadow: inset 0 0 30px rgb(26 34 54 / 0.18);
+}
+.yp-mat.has-photo { display: block; overflow: hidden; background: var(--sky-soft); }
+.yp-mat.has-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; filter: saturate(0.94) contrast(1.03); }
+.yp-mat-date { font: 600 12px var(--font-label); letter-spacing: 0.2em; text-transform: uppercase; color: var(--navy); }
+.yp-mat-line { font: 400 clamp(30px, 3vw, 48px)/1.05 var(--font-script); color: var(--red); padding: 0 8%; }
+.yp-label { /* right-aligned under the frame, clear of the roses on the left */
+  position: absolute; left: 20%; right: 6%; top: 100%; margin-top: 10px; display: grid; gap: 2px; justify-items: end; text-align: right; z-index: 4;
+}
+.yp-label .yp-mat-line { font-size: clamp(24px, 2.2vw, 34px); padding: 0; }
+.yp-mat-frame { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; filter: drop-shadow(0 22px 30px rgb(26 34 54 / 0.4)); }
+.yp-mat-roses { position: absolute; z-index: 3; width: 90%; left: -24%; bottom: -6%; rotate: 16deg; filter: drop-shadow(0 12px 18px rgb(0 0 0 / 0.3)); }
+
+.yp-print {
+  position: absolute; z-index: 3; margin: 0; width: clamp(130px, 12.5vw, 210px); padding: 8px 8px 28px; background: #fffaf7;
+  box-shadow: 0 18px 30px -16px rgb(26 34 54 / 0.55), 0 0 0 1px rgb(26 34 54 / 0.05);
+  rotate: var(--tilt, 0deg); transition: rotate 0.5s var(--ease-out), scale 0.5s var(--ease-out);
+}
+.yp-print img { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.yp-print::before { /* washi tape */
+  content: ''; position: absolute; top: -11px; left: 50%; width: 46%; height: 22px; translate: -50% 0; rotate: -3deg;
+  background: rgb(239 195 204 / 0.85); mix-blend-mode: multiply;
+}
+.yp-print:nth-of-type(odd)::before { background: rgb(147 179 228 / 0.8); }
+.yp-print:hover { rotate: 0deg; scale: 1.06; z-index: 6; }
+.yp-print-1 { --tilt: -7deg; left: 1%; top: 3%; }
+.yp-print-2 { --tilt: 6deg; right: 0; top: 9%; }
+.yp-print-3 { --tilt: -4deg; right: -2%; bottom: -7%; } /* below the label line, overlapping the frame corner */

@@ -1,0 +1,106 @@
+/* #01 — CELESTIAL: a pastel sky poster. Navy didone title, our photo in a tall panel,
+   and Michelangelo's two hands reaching across it — the spark between them pulses with the song. */
+.hero {
+  --hw: 50vw;                          /* each hand reaches in from a viewport edge to the centre */
+  --gap: 12px;                         /* the space left between the fingertips */
+  --panel-w: clamp(300px, 27vw, 430px);
+  --line: color-mix(in srgb, var(--navy) 55%, transparent);
+  position: relative; z-index: 6; isolation: isolate;
+  overflow-x: clip; overflow-y: visible; /* hands run off the sides; clouds still hang into #02 */
+  display: grid; justify-items: center; align-content: start; text-align: center;
+  padding: calc(var(--frame-inset) + 26px) var(--gutter) calc(var(--frame-inset) + clamp(190px, 17vw, 290px)) !important;
+  color: var(--navy);
+  background: var(--sky) url('/art/sky-a.webp') center 22% / cover no-repeat;
+}
+
+/* ---- the masthead: kicker between hairlines, then the big condensed didone ---- */
+.hero-top { position: relative; z-index: 1; width: 100%; }
+.hero-kicker {
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; column-gap: 22px; margin: 0;
+  font: 600 clamp(15px, 1.3vw, 19px)/1.05 var(--font-label); letter-spacing: 0.2em; text-transform: lowercase;
+}
+.hero-kicker::before, .hero-kicker::after { content: ''; height: 1px; background: var(--line); grid-row: 1 / span 2; }
+.hero-kicker::before { grid-column: 1; }
+.hero-kicker::after { grid-column: 3; }
+.hero-kicker span { grid-column: 2; }
+.hero-kicker span + span { font-style: italic; font-weight: 400; letter-spacing: 0.08em; font-size: 0.9em; }
+.hero-title {
+  margin: 0.06em 0 0; font: 400 clamp(150px, 17.5vw, 290px)/0.8 var(--font-display);
+  text-transform: uppercase; letter-spacing: 0.035em; color: var(--navy);
+  text-shadow: 0 1px 0 rgb(255 255 255 / 0.18);
+}
+
+/* ---- poster margins: a small paragraph, a vertical date ---- */
+.hero-note {
+  position: absolute; z-index: 2; left: calc(var(--frame-inset) + clamp(28px, 3.4vw, 56px)); top: clamp(128px, 11vw, 176px); /* beside the title */
+  max-width: 22ch; margin: 0; text-align: left; font: 400 clamp(13px, 1vw, 15px)/1.45 var(--font-serif);
+}
+.hero-date {
+  position: absolute; z-index: 2; left: calc(var(--frame-inset) + clamp(22px, 2.4vw, 40px)); bottom: clamp(230px, 22vw, 360px);
+  margin: 0; writing-mode: vertical-rl; rotate: 180deg;
+  font: 400 clamp(26px, 2.3vw, 38px)/1 var(--font-serif); letter-spacing: 0.02em;
+}
+
+/* ---- the stage: panel in the middle, hairlines + numbers + echoes around it, hands across ---- */
+.hero-stage { position: relative; width: 100%; margin-top: clamp(22px, 2.4vw, 40px); display: grid; justify-items: center; }
+.hero-panel {
+  position: relative; z-index: 3; margin: 0; width: var(--panel-w); aspect-ratio: 3 / 4.4; overflow: hidden;
+  background: var(--sky-soft); box-shadow: 0 30px 60px -28px rgb(26 34 54 / 0.55), 0 0 0 1px rgb(26 34 54 / 0.18);
+}
+.hero-photo { width: 100%; height: 100%; object-fit: cover; display: block; filter: saturate(0.92) contrast(1.04) sepia(0.08); }
+.hero-panel::after { /* print grain + a faint sky tint so the photo belongs to the poster */
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: var(--grain) 0 0 / 180px, linear-gradient(170deg, rgb(239 195 204 / 0.18), transparent 40%, rgb(147 179 228 / 0.16));
+  mix-blend-mode: multiply;
+}
+
+.hero-rose {
+  position: absolute; z-index: 4; width: clamp(200px, 17vw, 290px); height: auto; pointer-events: none;
+  left: calc(50% + var(--panel-w) / 2 - 70px); bottom: -36px; rotate: -8deg;
+  filter: drop-shadow(0 12px 16px rgb(26 34 54 / 0.3));
+}
+
+/* the hands share one horizontal line through their fingertips (measured from the art) */
+.hero-hands { position: absolute; z-index: 5; left: 50%; top: 50%; width: 100vw; height: 0; translate: -50% 0; pointer-events: none; }
+.hand { position: absolute; width: var(--hw); height: auto; filter: drop-shadow(0 18px 22px rgb(26 34 54 / 0.32)); will-change: transform; }
+.hand-adam { right: calc(50% + var(--gap) / 2); top: calc(var(--hw) * -0.2567); } /* tip at 65.4% of a 1600x628 image */
+.hand-god { left: calc(50% + var(--gap) / 2); top: calc(var(--hw) * -0.1943); }   /* tip at 45.0% of a 1600x691 image */
+.star {
+  position: absolute; left: 50%; top: 0; width: 30px; aspect-ratio: 1; z-index: 2;
+  transform: translate(-50%, -50%) scale(calc(var(--beat, 1) * var(--near, 1)));
+  filter: drop-shadow(0 0 8px rgb(255 247 230 / 0.95)) drop-shadow(0 0 22px rgb(255 214 222 / 0.8));
+}
+.star svg { width: 100%; height: 100%; fill: #fffaf0; }
+
+/* hairlines with crosshair ticks */
+.hero-lines i { position: absolute; z-index: 1; background: var(--line); }
+.hl-a { height: 1px; left: calc(50% - 50vw + var(--frame-inset) + 40px); right: calc(50% + var(--panel-w) / 2 - 30px); top: 83%; }
+.hl-b { width: 1px; left: calc(50% - 50vw + var(--frame-inset) + 120px); top: 62%; bottom: 8%; }
+.hl-c { height: 1px; left: calc(50% + var(--panel-w) / 2 - 30px); right: calc(50% - 50vw + var(--frame-inset) + 40px); top: 21%; }
+.hl-d { width: 1px; right: calc(50% - 50vw + var(--frame-inset) + 150px); top: 6%; bottom: 58%; }
+
+/* the italic echo, half hidden behind the panel like a line of print */
+.hero-echo {
+  position: absolute; z-index: 2; margin: 0; display: grid; text-align: left; white-space: nowrap;
+  font: italic 400 clamp(17px, 1.45vw, 22px)/1.25 var(--font-serif);
+}
+.hero-echo span:nth-child(1) { opacity: 0.45; }
+.hero-echo span:nth-child(2) { opacity: 0.7; }
+.echo-l { right: calc(50% + var(--panel-w) / 2 - 120px); top: calc(50% + var(--hw) * 0.15 + 18px); }  /* under the hanging fingers of Adam */
+.echo-r { left: calc(50% + var(--panel-w) / 2 - 110px); top: calc(50% + var(--hw) * 0.245 + 18px); } /* under the Creator's curled fingers */
+
+/* the live counter, set like the thin numerals on the poster: days beside the title, the clock under the Creator's arm */
+.hero .counter { position: absolute; z-index: 2; margin: 0; display: grid; gap: 6px; pointer-events: none; }
+.hero .counter > div { display: grid; gap: 6px; }
+.hero .counter dt { order: 2; opacity: 1; font: 600 11px var(--font-label); letter-spacing: 0.24em; text-transform: uppercase; }
+.hero .counter dd { margin: 0; font: 300 clamp(48px, 4.6vw, 76px)/0.85 var(--font-display); font-variant-numeric: lining-nums tabular-nums; letter-spacing: 0.02em; }
+.hero-days { right: calc(var(--frame-inset) + clamp(36px, 4.4vw, 80px)); top: clamp(120px, 10.5vw, 168px); text-align: right; }
+.hero-clock { right: calc(50% - 50vw + var(--frame-inset) + clamp(40px, 5vw, 90px)); top: calc(50% + var(--hw) * 0.12 + 24px); text-align: right; }
+
+.hero-sign {
+  position: relative; z-index: 6; margin: clamp(40px, 4vw, 64px) 0 0;
+  font: 600 clamp(13px, 1vw, 15px) var(--font-label); letter-spacing: 0.42em; text-transform: uppercase; color: var(--navy);
+}
+
+/* the clouds of the bank still hang over the next chapter */
+#site .hero { position: relative; z-index: 6; }

@@ -1,0 +1,106 @@
+/* ---------- SCROLL RAIL: the frame's right hairline doubles as the scrollbar (see rail.js) ---------- */
+html.has-rail { scrollbar-width: none; }
+html.has-rail::-webkit-scrollbar { display: none; }
+
+.scroll-rail {
+  --rail-ink: var(--paper);
+  --rail-rose: var(--red-bright);
+  --rail-star: #FFFAF0;
+  --rail-glow: drop-shadow(0 0 5px rgb(255 247 230 / 0.95)) drop-shadow(0 0 14px rgb(242 107 126 / 0.75));
+  --rail-halo: 0 1px 2px rgb(26 34 54 / 0.55), 0 0 18px rgb(26 34 54 / 0.45);
+  position: fixed; z-index: 56; width: 26px;
+  right: calc(var(--frame-inset) - 13px); /* centred on the frame's right hairline */
+  top: calc(var(--frame-inset) + 64px); /* clear of the moon */
+  bottom: calc(var(--frame-inset) + 72px); /* clear of the play button */
+  color: var(--rail-ink); cursor: pointer; touch-action: none; user-select: none;
+  opacity: 0.7; transition: opacity 0.7s, color 0.5s;
+}
+body.ground-light .scroll-rail {
+  --rail-ink: var(--navy);
+  --rail-rose: var(--red);
+  --rail-star: var(--red);
+  --rail-glow: drop-shadow(0 0 4px rgb(195 24 43 / 0.45)) drop-shadow(0 0 12px rgb(251 241 238 / 0.9));
+  --rail-halo: 0 0 2px rgb(251 241 238 / 0.9), 0 0 16px rgb(251 241 238 / 0.85);
+}
+.scroll-rail.is-active, .scroll-rail:hover, .scroll-rail.is-dragging { opacity: 1; }
+.scroll-rail.is-hidden { opacity: 0; pointer-events: none; }
+body.is-rail-dragging, body.is-rail-dragging * { cursor: grabbing !important; user-select: none; }
+
+/* the track, with crosshair serifs at both ends like the poster hairlines */
+.rail-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; translate: -50% 0; background: currentColor; opacity: 0.4; }
+.rail-line::before, .rail-line::after { content: ''; position: absolute; left: 50%; width: 9px; height: 1px; translate: -50% 0; background: currentColor; }
+.rail-line::before { top: 0; }
+.rail-line::after { bottom: 0; }
+
+/* how far she's come: a rose thread drawn down to the star */
+.rail-fill {
+  position: absolute; left: 50%; top: 0; width: 2px; height: 100%; transform-origin: top; transform: translateX(-50%) scaleY(0);
+  background: linear-gradient(to bottom, transparent, var(--rail-rose) 12%); border-radius: 2px; transition: background 0.5s;
+}
+
+/* one tick per chapter: hover for its name, click to go there */
+.rail-ticks { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; }
+.rail-tick { position: absolute; left: 0; right: 0; top: calc(var(--at, 0) * 100%); height: 16px; translate: 0 -50%; }
+.rail-tick::before {
+  /* drawn at its widest (19px) and scaled down, so growing it never touches layout */
+  content: ''; position: absolute; left: 50%; top: 50%; width: 19px; height: 1px; translate: -50% -50%; scale: 0.37 1;
+  background: currentColor; opacity: 0.6; transition: scale 0.45s var(--ease-out), background 0.45s, opacity 0.45s;
+}
+.rail-tick.is-past::before { background: var(--rail-rose); opacity: 1; }
+.rail-tick.is-here::before { scale: 0.68 2; }
+.rail-tick:hover::before { scale: 1 2; opacity: 1; }
+.rail-num, .rail-name { position: absolute; top: 50%; white-space: nowrap; pointer-events: none; text-shadow: var(--rail-halo); }
+.rail-num {
+  right: calc(100% - 2px); translate: 4px -50%; font: 600 9px/1 var(--font-label); letter-spacing: 0.16em;
+  opacity: 0; transition: opacity 0.4s, translate 0.5s var(--ease-out);
+}
+.scroll-rail:hover .rail-num, .scroll-rail.is-dragging .rail-num { opacity: 0.75; translate: 0 -50%; }
+.rail-tick.is-here .rail-num { opacity: 1; }
+/* chapter names sit on little museum placards so they read over photos, cream and night alike */
+.rail-name, .rail-scrub {
+  display: grid; justify-items: end; padding: 7px 14px 8px; text-shadow: none;
+  background: var(--paper); color: var(--navy); border: 1px solid color-mix(in srgb, var(--navy) 28%, transparent);
+  box-shadow: 0 12px 26px -14px rgb(26 34 54 / 0.6), 0 2px 6px -3px rgb(26 34 54 / 0.3);
+}
+.rail-no { font: 600 9px/1 var(--font-label); letter-spacing: 0.18em; color: var(--red); margin-bottom: 4px; }
+.rail-name {
+  right: calc(100% + 18px); translate: 10px -50%; font: 400 24px/1 var(--font-script);
+  opacity: 0; transition: opacity 0.35s, translate 0.55s var(--ease-out);
+}
+.rail-tick:hover .rail-name { opacity: 1; translate: 0 -50%; }
+.scroll-rail.is-dragging .rail-name { opacity: 0; } /* the star's own label speaks while scrubbing */
+
+/* the thumb: a star riding the line */
+.rail-star { position: absolute; left: 50%; top: 0; width: 0; height: 0; will-change: transform; cursor: grab; }
+.rail-star svg {
+  /* drawn at hover size (28px) and shown at 22px via `scale`, which composes with the spin rail.js sets on `transform` */
+  position: absolute; left: -14px; top: -14px; width: 28px; height: 28px; scale: 0.786; fill: var(--rail-star); filter: var(--rail-glow);
+  transition: fill 0.5s, scale 0.35s var(--ease-out);
+}
+.scroll-rail:hover .rail-star svg, .scroll-rail.is-dragging .rail-star svg { scale: 1; }
+/* a comet tail behind it when she scrolls fast */
+.rail-tail {
+  position: absolute; left: 0; bottom: 0; width: 2px; height: 120px; transform-origin: bottom; transform: translateX(-50%) scaleY(0);
+  background: linear-gradient(to top, var(--rail-rose), transparent); border-radius: 2px; pointer-events: none;
+}
+.rail-tail.is-up { bottom: auto; top: 0; transform-origin: top; background: linear-gradient(to bottom, var(--rail-rose), transparent); }
+/* while dragging, the chapter under the star is written beside it */
+.rail-scrub {
+  position: absolute; right: 30px; top: 0; translate: 12px -50%; white-space: nowrap; pointer-events: none;
+  font: 400 30px/1 var(--font-script); rotate: -2deg;
+  opacity: 0; transition: opacity 0.3s, translate 0.55s var(--ease-out);
+}
+.rail-scrub:empty { display: none; }
+.scroll-rail.is-dragging .rail-scrub { opacity: 1; translate: 0 -50%; }
+
+/* ---------- inner scrollbars (love book, places list, letters): a thin rose thread ---------- */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track, ::-webkit-scrollbar-corner { background: transparent; }
+::-webkit-scrollbar-thumb {
+  border: 4px solid transparent; border-radius: 12px; background-clip: padding-box;
+  background-image: linear-gradient(var(--red-bright), var(--red));
+}
+::-webkit-scrollbar-thumb:hover { border-width: 3px; }
+@supports not selector(::-webkit-scrollbar) {
+  * { scrollbar-width: thin; scrollbar-color: var(--red) transparent; }
+}

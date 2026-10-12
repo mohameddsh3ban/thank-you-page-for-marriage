@@ -1,0 +1,179 @@
+/* Noto Serif Display, latin, pinned to its condensed cut. A single font-stretch value in the
+   descriptor clamps the variable wdth axis, so every font shorthand still gets the narrow width. */
+@font-face {
+  font-family: 'Celestial Display'; font-style: normal; font-weight: 300 600; font-stretch: 62.5%; font-display: swap;
+  src: url(https://fonts.gstatic.com/s/notoserifdisplay/v29/buErppa9f8_vkXaZLAgP0G5Wi6QmA1Qwda5M.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+@font-face {
+  font-family: 'Celestial Display'; font-style: italic; font-weight: 300 600; font-stretch: 62.5%; font-display: swap;
+  src: url(https://fonts.gstatic.com/s/notoserifdisplay/v29/buEpppa9f8_vkXaZLAgP0G5Wi6QmA1QwcJ5OEl4.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2212;
+}
+
+:root {
+  /* CELESTIAL: pastel sky, navy didone ink, red garden roses */
+  --red: #C3182B;        /* the roses */
+  --red-deep: #8C1426;
+  --red-bright: #F26B7E; /* rose on night grounds */
+  --wine: #1D2640;       /* night sky */
+  --paper: #FBF1EE;      /* cloud cream */
+  --ink: #1A2236;        /* navy ink */
+  --marble: #F4F1EC;
+  --navy: #2B3754;       /* the big titles */
+  --sky: #93B3E4;
+  --sky-soft: #C9DAF3;
+  --blush: #EFC3CC;
+  --blush-soft: #F8E1E3;
+  --wash: linear-gradient(180deg, #DCE6F6 0%, #F3DDE3 46%, #FBF1EE 100%); /* daylight chapters */
+  --night: radial-gradient(ellipse at 70% 30%, #33406A 0%, #1D2640 55%, #121829 100%); /* night chapters */
+
+  /* condensed high-contrast didone: an alias face pinned to the narrow width (see @font-face above) */
+  --font-display: 'Celestial Display', 'Bodoni Moda', 'Didot', serif;
+  --font-script: 'Pinyon Script', cursive;
+  --font-label: 'Bodoni Moda', 'Didot', serif;
+  --font-body: 'Instrument Sans', system-ui, sans-serif;
+  --font-serif: 'Bodoni Moda', 'Didot', 'Bodoni 72', serif;
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.12 0 0 0 0 0.2 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+  --gutter: clamp(16px, 4vw, 48px);
+  --frame-inset: clamp(8px, 1.5vw, 16px);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font: 16px/1.5 var(--font-body);
+  overflow-x: hidden;
+}
+/* film grain over everything, like an old print */
+body::after {
+  content: ''; position: fixed; inset: 0; z-index: 58; pointer-events: none; opacity: 0.22;
+  background: var(--grain) 0 0 / 220px;
+}
+body.is-locked { overflow: hidden; height: 100svh; }
+button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+
+.eyebrow {
+  font: 600 11px/1.3 var(--font-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin: 0;
+}
+.script { font-family: var(--font-script); font-weight: 400; margin: 0; }
+
+/* Hermes-style hairline frame around the viewport */
+.frame {
+  position: fixed; inset: var(--frame-inset); z-index: 50; pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--navy) 45%, transparent);
+  transition: border-color 1.2s;
+}
+body:not(.is-locked) .frame { border-color: color-mix(in srgb, var(--navy) 35%, transparent); }
+
+/* ---------- SITE (shared) ---------- */
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+#site section { min-height: 100svh; padding: calc(var(--frame-inset) + 56px) var(--gutter); position: relative; }
+.counter { display: flex; flex-wrap: wrap; gap: 8px 28px; margin: 18px 0 0; }
+.counter div { display: grid; }
+.counter dt { font: 600 11px var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.75; order: 2; }
+.counter dd { margin: 0; font: 400 clamp(44px, 9vw, 88px)/0.9 var(--font-display); font-variant-numeric: tabular-nums; }
+
+.placeholder { display: grid; align-content: center; gap: 10px; background: var(--ink); }
+.placeholder h2 { margin: 0; font: 400 clamp(80px, 22vw, 260px)/0.85 var(--font-display); text-transform: uppercase; color: var(--red); }
+.placeholder .script { font-size: clamp(26px, 5vw, 44px); }
+.placeholder.paper { background: var(--paper); color: var(--ink); }
+.placeholder.wine { background: var(--wine); }
+.placeholder.wine h2 { color: var(--paper); }
+
+/* ---------- NOW PLAYING + LYRICS ---------- */
+.now-playing {
+  position: fixed; z-index: 60; left: calc(var(--frame-inset) + 14px); bottom: calc(var(--frame-inset) + 12px);
+  right: 84px; max-width: 560px; pointer-events: none;
+  color: var(--paper); text-shadow: 0 1px 2px rgb(26 34 54 / 0.6), 0 0 18px rgb(26 34 54 / 0.45);
+}
+/* a soft dark glow behind the lyrics so they read on red, cream, photos — anything */
+.now-playing::before {
+  content: ''; position: absolute; z-index: -1; left: -60px; right: -120px; top: -40px; bottom: -36px;
+  background: radial-gradient(ellipse at 20% 70%, rgb(26 34 54 / 0.6), rgb(26 34 54 / 0.24) 45%, transparent 72%);
+  pointer-events: none;
+}
+.np-meta { display: flex; align-items: center; gap: 8px; font: 600 11px var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; }
+.np-bars { display: inline-flex; gap: 2px; align-items: flex-end; height: 10px; }
+.np-bars i { width: 2px; background: currentColor; height: 100%; animation: bar 0.9s ease-in-out infinite; }
+.np-bars i:nth-child(2) { animation-delay: -0.3s; }
+.np-bars i:nth-child(3) { animation-delay: -0.6s; }
+body.is-paused .np-bars i { animation-play-state: paused; }
+@keyframes bar { 50% { transform: scaleY(0.3); } }
+.lyric-prev, .lyric-now { margin: 0; font-family: var(--font-script); transition: opacity 0.5s, transform 0.5s var(--ease-out); }
+.lyric-prev { font-size: clamp(16px, 2.6vw, 22px); opacity: 0.35; min-height: 1.3em; margin-top: 4px; }
+.lyric-now { font-size: clamp(24px, 4.4vw, 38px); line-height: 1.15; min-height: 1.2em; }
+.lyric-now.is-new { animation: lyricIn 0.6s var(--ease-out); }
+@keyframes lyricIn { from { opacity: 0; transform: translateY(8px); filter: blur(4px); } }
+
+.player-ctrl { position: fixed; z-index: 60; right: calc(var(--frame-inset) + 12px); bottom: calc(var(--frame-inset) + 12px); }
+.player-ctrl button {
+  width: 44px; height: 44px; border: 1px solid currentColor; font: 600 12px var(--font-label);
+  color: var(--paper); background: color-mix(in srgb, var(--ink) 40%, transparent); backdrop-filter: blur(6px);
+}
+.player-ctrl button:hover, .player-ctrl button:focus-visible { background: var(--paper); color: var(--ink); outline: none; }
+
+.yt-host { position: fixed; width: 1px; height: 1px; left: -10px; top: -10px; opacity: 0; pointer-events: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+/* sentence-length captions read better in lowercase than as all-caps eyebrows */
+.first-note, .angel-cap, .hero-sub { text-transform: none; letter-spacing: 0.04em; font-size: 13px; }
+
+/* ---------- PHONE NOTE (laptop-only site) ---------- */
+.phone-note {
+  position: fixed; inset: 0; z-index: 45; display: grid; align-content: center; justify-items: center; gap: 10px;
+  padding: calc(var(--frame-inset) + 28px) 28px; text-align: center; background: var(--sky) url('/art/gate/sky-b.webp') center / cover; color: var(--navy); /* gate art: public before unlock */
+}
+.phone-note::before { content: ''; position: absolute; inset: 0; background: rgb(251 241 238 / 0.35); pointer-events: none; }
+.phone-note .eyebrow { color: var(--navy); position: relative; }
+.phone-cupid { width: min(62vw, 260px); height: min(80vw, 340px); position: relative; }
+.phone-title { margin: 0; font: 400 clamp(56px, 17vw, 96px)/0.85 var(--font-display); text-transform: uppercase; color: var(--navy); position: relative; }
+.phone-title .script { text-transform: none; color: var(--red); font-size: 0.72em; }
+.phone-copy { margin: 6px 0 0; font: 400 16px/1.6 var(--font-body); max-width: 30ch; position: relative; }
+.phone-sign { margin-top: 6px; }
+body.is-phone .frame { border-color: color-mix(in srgb, var(--navy) 45%, transparent); }
+
+/* ---------- FLOW: moon progress + chapter arrivals ---------- */
+.moon-nav {
+  position: fixed; z-index: 55; top: calc(var(--frame-inset) + 12px); right: calc(var(--frame-inset) + 14px);
+  display: flex; align-items: center; gap: 10px; flex-direction: row-reverse; pointer-events: none;
+  opacity: 0; transition: opacity 1s, color 0.4s; color: var(--paper);
+}
+.moon-nav.is-on { opacity: 1; }
+.moon-nav svg { width: 30px; height: 30px; }
+.moon-lit { fill: currentColor; }
+.moon-shade { fill: var(--moon-bg, #0B0607); transition: fill 0.4s; }
+.moon-ring { fill: none; stroke: currentColor; stroke-width: 1; }
+.moon-label { font: 600 11px var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; }
+
+.moon-nav.on-light { color: var(--navy); }
+
+.chapter-mark { position: relative; display: inline-block; padding-bottom: 6px; }
+.chapter-mark::after {
+  content: ''; position: absolute; left: 0; bottom: 0; height: 1px; width: 100%; background: currentColor;
+  transform: scaleX(0); transform-origin: left; transition: transform 1.2s var(--ease-out) 0.15s;
+}
+section.is-arrived .chapter-mark::after { transform: scaleX(1); }
+#site > section > header h2, #site > section .places-title, #site > section .seasons-title {
+  transition: opacity 1s, transform 1.1s var(--ease-out), filter 1s;
+}
+#site > section:not(.is-arrived) > header h2 { opacity: 0; transform: translateY(26px); filter: blur(6px); }
+@media (prefers-reduced-motion: reduce) {
+  #site > section:not(.is-arrived) > header h2 { opacity: 1; transform: none; filter: none; }
+}
+
+/* shared keyframes (used by the gate and several chapters) */
+@keyframes breathe { 50% { opacity: 0.55; } }
+@keyframes shake { 20%, 60% { transform: translateX(-8px); } 40%, 80% { transform: translateX(8px); } }
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } }

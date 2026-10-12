@@ -1,0 +1,18 @@
+node_modules
+dist
+.DS_Store
+
+# your own song, lyrics and videos never go in a public repo (copyrighted / private)
+public/audio/*.mp3
+public/audio/*.m4a
+public/lyrics.lrc
+public/lyrics.lrc.bak
+public/videos/
+
+# raw input for the chat-mining scripts (your WhatsApp export) — see scripts/lib/chat.mjs
+chat-export/
+
+# local tool state
+.wrangler/
+.impeccable/
+.dev.vars

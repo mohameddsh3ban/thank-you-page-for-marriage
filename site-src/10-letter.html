@@ -1,0 +1,19 @@
+<!-- #10 — under a fresco arch, a sealed envelope; tap it and the letter unfolds -->
+<section id="letter" class="letter" aria-labelledby="letter-title">
+  <div class="arch" aria-hidden="true"></div>
+
+  <header class="letter-head">
+    <p class="eyebrow">#10 — The letter</p>
+    <h2 class="script letter-title" id="letter-title"></h2>
+  </header>
+
+  <button class="envelope" id="envelope" type="button" aria-expanded="false" aria-controls="letter-paper">
+    <img src="/art/envelope.webp" alt="" width="1168" height="880" decoding="async">
+    <span class="eyebrow">tap to open · it’s for you</span>
+  </button>
+
+  <article class="letter-paper" id="letter-paper" hidden>
+    <div class="letter-body" id="letter-body"></div>
+    <p class="script letter-sign" id="letter-sign"></p>
+  </article>
+</section>

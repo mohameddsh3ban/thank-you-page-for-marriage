@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#93B3E4">
+  <title>A letter for Mia</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- fonts load without blocking the first paint: the loading screen waits for them instead -->
+  <link id="gfonts" rel="preload" as="style" onload="this.rel='stylesheet'" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500&family=Pinyon+Script&display=swap">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..700;1,6..96,400..700&family=Instrument+Sans:wght@400;500&family=Pinyon+Script&display=swap"></noscript>
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="https://fonts.gstatic.com/s/notoserifdisplay/v29/buErppa9f8_vkXaZLAgP0G5Wi6QmA1Qwda5M.woff2">
+  <link rel="preload" as="image" href="/art/gate/envelope.webp">
+  <link rel="stylesheet" href="/src/styles.css">
+  <link rel="stylesheet" href="/src/gate.css">
+  <link rel="stylesheet" href="/src/phone.css">
+  <link rel="stylesheet" href="/src/loader.css">
+</head>
+<body class="is-locked">
+  <!-- viewport frame, Hermes style -->
+  <div class="frame" aria-hidden="true"></div>
+
+  <!-- LOADING SCREEN — everything is fetched before the gate (and again, privately, after it) -->
+  <div class="loader" id="loader" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-busy="true">
+    <div class="ld-inner">
+      <svg class="ld-moon" viewBox="0 0 40 40" aria-hidden="true">
+        <mask id="ld-mask"><rect x="0" y="0" width="40" height="40" fill="#fff"/><circle class="ld-shade" cx="14" cy="20" r="17" fill="#000"/></mask>
+        <circle class="ld-lit" cx="20" cy="20" r="17" mask="url(#ld-mask)"/>
+        <circle class="ld-ring" cx="20" cy="20" r="18"/>
+      </svg>
+      <p class="ld-kicker ld-type">a letter for</p>
+      <p class="ld-title ld-type" aria-hidden="true" data-script-name><span class="script">M</span>ia</p>
+      <div class="ld-line" aria-hidden="true"><i class="ld-fill"></i></div>
+      <div class="ld-meta ld-type"><span class="ld-label" aria-live="polite"></span><span class="ld-pct" aria-hidden="true">000</span></div>
+      <button class="ld-retry" type="button" hidden>try again</button>
+    </div>
+  </div>
+
+  <!-- phones: a sweet note instead of the site -->
+  <section class="phone-note" id="phone-note" hidden aria-labelledby="phone-title">
+    <p class="eyebrow">N°00 — For <span data-her-name>Mia</span></p>
+    <canvas class="phone-cupid" id="phone-cupid" aria-hidden="true"></canvas>
+    <h1 id="phone-title" class="phone-title">Not here,<br><span class="script" data-her-name>Mia</span></h1>
+    <p class="phone-copy">this one is too big for a phone screen<br>open it on your laptop · turn the sound on<br>i'll be waiting there ♥</p>
+    <p class="eyebrow phone-sign">— <span data-from-name="lower">mark</span></p>
+  </section>
+
+  <!-- THE GATE — an invitation: a sealed letter for her; tap the seal, the music starts, the card rises -->
+  <section class="gate" id="gate" aria-labelledby="gate-title">
+    <img class="g-roses g-roses-tl" src="/art/gate/roses-garland.webp" alt="" aria-hidden="true">
+    <img class="g-roses g-roses-tr" src="/art/gate/roses-garland.webp" alt="" aria-hidden="true">
+    <div class="g-petals" id="gate-petals" aria-hidden="true"></div>
+    <div class="corner tl">N°00 — for <span data-her-name>Mia</span></div>
+    <div class="corner tr">private · 1 of 1</div>
+
+    <div class="g-stage">
+      <p class="g-kicker">a letter for</p>
+      <h1 class="g-name" id="gate-title" data-script-name><span class="script">M</span>ia</h1>
+      <button class="g-envelope" id="begin" type="button" aria-label="Open the letter">
+        <img src="/art/gate/envelope.webp" alt="" width="1168" height="880">
+        <span class="g-seal-ring" aria-hidden="true"></span>
+      </button>
+      <p class="g-sub"><span class="g-tap">tap the seal</span><span class="g-dot">·</span>turn your sound on</p>
+    </div>
+
+    <!-- her phone: she unlocks it with her own passcode, then we dive into it and land on the hero -->
+    <div class="g-phone" id="g-phone" data-state="lock" hidden>
+      <div class="gp-device" id="gp-device">
+        <span class="gp-btn gp-action" aria-hidden="true"></span>
+        <span class="gp-btn gp-vol-up" aria-hidden="true"></span>
+        <span class="gp-btn gp-vol-down" aria-hidden="true"></span>
+        <span class="gp-btn gp-power" aria-hidden="true"></span>
+        <div class="gp-screen" id="gp-screen">
+          <div class="gp-wall" aria-hidden="true"><img src="/art/gate/roses-garland.webp" alt=""></div>
+          <img class="gp-home" id="gp-home" alt="" aria-hidden="true">
+          <div class="gp-island" aria-hidden="true"></div>
+          <div class="gp-status" aria-hidden="true">
+            <span></span>
+            <span class="gp-icons">
+              <svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>
+              <svg viewBox="0 0 16 12"><path d="M8 2.6c2.3 0 4.4.9 6 2.4l1.3-1.4A10.6 10.6 0 0 0 8 .6 10.6 10.6 0 0 0 .7 3.6L2 5c1.6-1.5 3.7-2.4 6-2.4Zm0 3.8c1.3 0 2.5.5 3.4 1.3l1.3-1.4A6.9 6.9 0 0 0 8 4.4c-1.8 0-3.5.7-4.7 1.9l1.3 1.4c.9-.8 2.1-1.3 3.4-1.3Zm0 3.8c.5 0 1 .2 1.3.5L8 12 6.7 10.7c.3-.3.8-.5 1.3-.5Z"/></svg>
+              <span class="gp-battery"><i></i></span>
+            </span>
+          </div>
+
+          <!-- the lock screen: a note from me waiting on it -->
+          <button type="button" class="gp-lock" id="gp-lock" aria-label="Your phone is locked. Open it to type your passcode">
+            <svg class="gp-padlock" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
+            <span class="gp-date" id="gp-date"></span>
+            <span class="gp-time" id="gp-time"></span>
+            <span class="gp-note" aria-hidden="true">
+              <span class="gp-note-app">♥</span>
+              <span class="gp-note-text"><b><span data-from-name="lower">mark</span><em>now</em></b><span>open your phone, <span data-her-name="lower">mia</span> · i left something inside for you</span></span>
+            </span>
+            <span class="gp-swipe" aria-hidden="true">swipe up to open</span>
+          </button>
+
+          <!-- the passcode screen -->
+          <div class="gp-pass" id="gp-pass" role="group" aria-labelledby="gp-pass-title">
+            <p class="gp-pass-title" id="gp-pass-title">Enter Passcode</p>
+            <div class="gp-dots" id="gp-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+            <p class="gp-sr" id="gp-count" aria-live="polite"></p>
+            <div class="gp-keys">
+              <button type="button" class="gp-key" data-digit="1" aria-label="1"><b>1</b><small></small></button>
+              <button type="button" class="gp-key" data-digit="2" aria-label="2"><b>2</b><small>ABC</small></button>
+              <button type="button" class="gp-key" data-digit="3" aria-label="3"><b>3</b><small>DEF</small></button>
+              <button type="button" class="gp-key" data-digit="4" aria-label="4"><b>4</b><small>GHI</small></button>
+              <button type="button" class="gp-key" data-digit="5" aria-label="5"><b>5</b><small>JKL</small></button>
+              <button type="button" class="gp-key" data-digit="6" aria-label="6"><b>6</b><small>MNO</small></button>
+              <button type="button" class="gp-key" data-digit="7" aria-label="7"><b>7</b><small>PQRS</small></button>
+              <button type="button" class="gp-key" data-digit="8" aria-label="8"><b>8</b><small>TUV</small></button>
+              <button type="button" class="gp-key" data-digit="9" aria-label="9"><b>9</b><small>WXYZ</small></button>
+              <span class="gp-key-gap" aria-hidden="true"></span>
+              <button type="button" class="gp-key" data-digit="0" aria-label="0"><b>0</b><small></small></button>
+              <span class="gp-key-gap" aria-hidden="true"></span>
+            </div>
+            <div class="gp-pass-foot"><span aria-hidden="true">Emergency</span><button type="button" class="gp-del" id="gp-del">Cancel</button></div>
+          </div>
+
+          <!-- after the right code: everything private downloads, shown like a phone restarting into us -->
+          <div class="gp-load" id="gp-load" role="progressbar" aria-label="Opening" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <svg class="gp-moon" viewBox="0 0 40 40" aria-hidden="true">
+              <mask id="gp-moon-mask"><rect x="0" y="0" width="40" height="40" fill="#fff"/><circle class="gp-moon-shade" cx="14" cy="20" r="17" fill="#000"/></mask>
+              <circle class="gp-moon-lit" cx="20" cy="20" r="17" mask="url(#gp-moon-mask)"/>
+              <circle class="gp-moon-ring" cx="20" cy="20" r="18"/>
+            </svg>
+            <span class="gp-load-line" aria-hidden="true"><i id="gp-load-fill"></i></span>
+            <span class="gp-load-label" id="gp-load-label">opening</span>
+            <button type="button" class="gp-retry" id="gp-retry" hidden>try again</button>
+          </div>
+
+          <span class="gp-homebar" aria-hidden="true"></span>
+          <span class="gp-glare" aria-hidden="true"></span>
+        </div>
+      </div>
+      <div class="gp-shadow" aria-hidden="true"></div>
+      <p class="hint gp-hint" id="gp-hint" aria-live="polite"></p>
+    </div>
+  </section>
+
+  <main id="site" hidden></main>
+
+  <aside class="now-playing" id="now-playing" aria-live="polite" hidden>
+    <div class="np-meta"><span class="np-bars" aria-hidden="true"><i></i><i></i><i></i></span><span id="np-title"></span></div>
+    <p class="lyric-prev" id="lyric-prev"></p>
+    <p class="lyric-now" id="lyric-now"></p>
+  </aside>
+  <div class="player-ctrl" id="player-ctrl" hidden>
+    <button type="button" id="toggle-play" aria-label="Play music">▶</button>
+  </div>
+
+  <div id="yt-host" class="yt-host" aria-hidden="true"></div>
+  <script type="module" src="/src/boot.js"></script>
+</body>
+</html>

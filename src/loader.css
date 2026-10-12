@@ -1,0 +1,57 @@
+/* ---------- LOADING SCREENS: a red moon fills while everything downloads (see loader.js) ---------- */
+.loader {
+  position: fixed; inset: 0; z-index: 45; display: grid; place-items: center;
+  background: var(--wash); color: var(--navy);
+  transition: opacity 0.9s var(--ease-out), visibility 0s;
+}
+.loader.is-away { opacity: 0; visibility: hidden; pointer-events: none; transition: opacity 0.9s var(--ease-out), visibility 0s 0.9s; }
+/* the glow behind the type, same as the gate's, so the hand-off between them is seamless */
+.loader::before {
+  content: ''; position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 46% 52% at 50% 50%, rgb(251 241 238 / 0.55), transparent 75%);
+}
+
+.ld-inner { position: relative; display: grid; justify-items: center; text-align: center; }
+.ld-moon { width: 34px; height: 34px; margin-bottom: clamp(18px, 3vh, 30px); overflow: visible; }
+.ld-moon .ld-lit { fill: var(--red); }
+.ld-moon .ld-ring { fill: none; stroke: var(--red); stroke-width: 1; }
+
+/* type waits for its fonts (the first thing the gate loader fetches) so nothing swaps mid-air */
+.ld-type { transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out); }
+html:not(.fonts-ready) .ld-type { opacity: 0; transform: translateY(8px); }
+
+.ld-kicker { margin: 0; font: italic 400 clamp(20px, 1.8vw, 28px)/1 var(--font-serif); }
+.ld-title {
+  margin: 4px 0 0; display: flex; align-items: baseline; justify-content: center;
+  font: 400 clamp(96px, 11vw, 190px)/0.82 var(--font-display); text-transform: uppercase; letter-spacing: 0.03em;
+}
+.ld-title .script {
+  font-family: var(--font-script); text-transform: none; font-size: 1.45em; line-height: 0.7; color: var(--red);
+  margin-right: -0.12em; transform: translateY(0.1em);
+}
+
+/* the progress hairline, with crosshair ticks at both ends like the poster's print marks */
+.ld-line {
+  position: relative; width: min(440px, 64vw); height: 1px; margin-top: clamp(26px, 4.5vh, 44px);
+  background: color-mix(in srgb, var(--navy) 22%, transparent);
+}
+.ld-line::before, .ld-line::after { content: ''; position: absolute; top: -6px; width: 1px; height: 13px; background: var(--navy); }
+.ld-line::before { left: 0; }
+.ld-line::after { right: 0; }
+.ld-fill { position: absolute; inset: 0; background: var(--navy); transform: scaleX(0); transform-origin: left; }
+
+.ld-meta {
+  width: min(440px, 64vw); margin-top: 12px; display: flex; justify-content: space-between; align-items: baseline; gap: 16px;
+}
+.ld-label { font: 600 11px/1.3 var(--font-label); letter-spacing: 0.14em; text-transform: uppercase; opacity: 0.8; text-align: left; }
+.ld-pct { font: 400 30px/1 var(--font-display); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; }
+
+.ld-retry {
+  margin-top: 18px; padding: 11px 22px; background: var(--navy); color: var(--paper);
+  font: 600 11px var(--font-label); letter-spacing: 0.18em; text-transform: uppercase; transition: background 0.2s;
+}
+.ld-retry:hover, .ld-retry:focus-visible { background: var(--red); outline: none; }
+
+/* phones never load the site (boot.js shows them a note instead) */
+@media (hover: none) and (pointer: coarse), (max-width: 760px) { .loader { display: none !important; } }
+@media (prefers-reduced-motion: reduce) { .ld-type { transition: none; } }

@@ -1,0 +1,134 @@
+/* #03 — Us, counted. Pinned: the title docks, the sky darkens (--dark 0 → 1, set by numbers.js) and the
+   stars come out; then one number at a time rolls in on an odometer while the same stars rearrange into
+   its picture on the canvas (numbers-stars.js). Legend and call overlays sit on that picture's stage:
+   --sx / --sy = its centre, --ss = its size. */
+.numbers {
+  --dark: 0; --accent: var(--red); --her-c: var(--red);
+  padding: 0 !important; background: #151b2e; color: var(--navy); transition: color 0.8s;
+}
+.numbers.is-night { color: var(--paper); --accent: var(--blush); --her-c: #f29db0; }
+.num-pin { position: relative; height: 100svh; overflow: hidden; isolation: isolate; }
+
+/* sky: dusk photo → night gradient → the moon → the stars (canvas) */
+.num-sky { position: absolute; inset: 0; z-index: -4; background: var(--sky) url('/art/sky-b.webp') center / cover no-repeat; }
+.num-sky::after { /* keeps the title readable over the clouds before night falls */
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(90deg, rgb(251 241 238 / 0.6), rgb(251 241 238 / 0.25) 46%, rgb(251 241 238 / 0.05) 72%);
+}
+.num-night { position: absolute; inset: 0; z-index: -3; background: var(--wine) var(--night); opacity: var(--dark); }
+.num-moon {
+  position: absolute; z-index: -2; left: 41%; top: calc(var(--frame-inset) + 30px); width: clamp(64px, 5.6vw, 100px); height: auto; pointer-events: none;
+  opacity: var(--dark); transform: translateY(calc((1 - var(--dark)) * 90px)) rotate(-8deg);
+  filter: drop-shadow(0 0 18px rgb(255 244 220 / 0.55)) drop-shadow(0 0 60px rgb(255 214 222 / 0.35));
+}
+.num-canvas { position: absolute; inset: 0; z-index: -1; width: 100%; height: 100%; pointer-events: none; }
+/* the milky way's glow, lying along the same diagonal as the timeline of stars (blurred: it adds no stars) */
+.num-glow {
+  position: absolute; z-index: -2; left: 2%; bottom: -6%; width: 104%; height: auto; pointer-events: none;
+  mix-blend-mode: screen; opacity: calc(var(--dark) * var(--glow, 0.55)); filter: saturate(1.15);
+  animation: num-glow-drift 40s ease-in-out infinite alternate;
+}
+@keyframes num-glow-drift { to { translate: -1.5% 1%; } }
+.numbers:not([data-scene='messages']):not([data-scene='streak']) { --glow: 0.22; } /* softer while the stars draw pictures */
+.num-glow { transition: opacity 1.4s; }
+/* the two of us on a hill, watching it all (in front of the stars, behind the words) */
+.num-horizon {
+  position: absolute; z-index: 0; left: 0; bottom: -6%; width: 100%; height: auto; pointer-events: none; /* low enough to clear the numbers column */
+  opacity: var(--dark); transform: translateY(calc((1 - var(--dark)) * 40px)); filter: brightness(0.92);
+}
+
+/* the title: centred alone first, then docked top-left */
+.numbers-head {
+  position: absolute; z-index: 3; left: 50%; top: 50%; translate: -50% -50%; text-align: center; width: max-content;
+  transition: left 1s var(--ease-out), top 1s var(--ease-out), translate 1s var(--ease-out);
+}
+.numbers-head .eyebrow { color: inherit; }
+.numbers-title { margin: 8px 0 0; font: 400 clamp(110px, 12vw, 210px)/0.86 var(--font-display); letter-spacing: 0.02em; text-transform: uppercase; transition: font-size 1s var(--ease-out); }
+.numbers-title .script { font-family: var(--font-script); text-transform: none; font-size: 0.7em; color: var(--accent); }
+.numbers-sub { margin: 10px 0 0; font: italic 400 18px/1.3 var(--font-serif); opacity: 0.85; transition: opacity 0.5s; }
+.numbers.is-docked .numbers-head { left: calc(var(--frame-inset) + clamp(28px, 3vw, 52px)); top: calc(var(--frame-inset) + 30px); translate: 0 0; text-align: left; }
+.numbers.is-docked .numbers-title { font-size: clamp(34px, 3vw, 50px); }
+.numbers.is-docked .numbers-sub { opacity: 0; }
+
+/* ---- the numbers, one at a time on the left; the stars draw the pictures on the right ---- */
+.num-scenes { list-style: none; margin: 0; padding: 0; position: absolute; inset: 0; pointer-events: none; }
+.num-scene {
+  position: absolute; inset: 0; display: grid; align-content: center;
+  padding: calc(var(--frame-inset) + 120px) 0 calc(var(--frame-inset) + 90px) clamp(48px, 6vw, 110px);
+  opacity: 0; visibility: hidden; transform: translateY(46px); filter: blur(8px);
+  transition: opacity 0.6s, transform 0.9s var(--ease-out), filter 0.6s, visibility 0s 0.9s;
+}
+.num-scene.is-past { transform: translateY(-46px); }
+.num-scene.is-on { opacity: 1; visibility: visible; transform: none; filter: none; transition: opacity 0.8s 0.15s, transform 1s var(--ease-out) 0.15s, filter 0.8s 0.15s, visibility 0s; }
+
+.ns-text { display: grid; justify-items: start; width: min(40vw, 640px); pointer-events: auto; }
+.ns-eyebrow { margin: 0; font: 600 12px var(--font-label); letter-spacing: 0.22em; text-transform: uppercase; color: var(--accent); }
+
+/* odometer */
+.odo { margin: 10px 0 0; display: flex; align-items: flex-start; font: 300 clamp(96px, 10vw, 190px)/1 var(--font-display); letter-spacing: 0.01em; font-variant-numeric: lining-nums tabular-nums; }
+.odo-col { display: inline-block; height: 1em; overflow: hidden; }
+.odo-strip { display: block; transform: translateY(0); transition: transform calc(1.5s + var(--k) * 0.14s) cubic-bezier(0.16, 1, 0.3, 1); }
+.odo-strip span { display: block; height: 1em; line-height: 1em; }
+.odo-sep { display: inline-block; line-height: 1em; }
+.odo-suffix { color: var(--accent); }
+
+.ns-label { margin: 8px 0 0; font: italic 400 clamp(26px, 2.4vw, 40px)/1.1 var(--font-serif); }
+.ns-note { margin: 12px 0 0; max-width: 42ch; font: 400 16px/1.55 var(--font-body); opacity: 0.86; }
+
+/* you vs me */
+.duel { display: grid; grid-template-columns: auto minmax(160px, 1fr) auto; gap: 14px; align-items: center; margin-top: 24px; width: min(480px, 100%); font: 600 11px var(--font-label); letter-spacing: 0.16em; text-transform: uppercase; }
+.duel-bar { display: flex; height: 6px; border-radius: 3px; overflow: hidden; background: color-mix(in srgb, currentColor 12%, transparent); }
+.db-her { width: calc(var(--her) * 100%); background: var(--her-c); transform: scaleX(0); transform-origin: left; transition: transform 1.3s var(--ease-out) 0.5s; }
+.db-me { flex: 1; background: currentColor; opacity: 0.6; transform: scaleX(0); transform-origin: right; transition: transform 1.3s var(--ease-out) 0.5s; }
+.is-on .db-her, .is-on .db-me { transform: scaleX(1); }
+.duel-you { color: var(--her-c); }
+
+.ns-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px 30px; margin: 26px 0 0; width: min(540px, 100%); }
+.ns-facts div { display: grid; gap: 2px; padding-top: 12px; border-top: 1px solid color-mix(in srgb, currentColor 20%, transparent); }
+.ns-facts dd { order: -1; margin: 0; font: 300 clamp(34px, 3vw, 48px)/1 var(--font-display); color: var(--accent); }
+.ns-facts dt { font: italic 400 14px/1.35 var(--font-serif); opacity: 0.85; }
+
+/* ---- on the star picture's stage ---- */
+.num-legend {
+  position: absolute; z-index: 2; left: var(--sx, 69%); top: calc(var(--sy, 52%) + var(--ss, 500px) * 0.56); translate: -50% 0;
+  width: max-content; max-width: 44vw; margin: 0; text-align: center; pointer-events: none;
+  font: italic 400 15px/1.4 var(--font-serif); opacity: 0; transition: opacity 0.7s 0.5s;
+}
+.num-legend.is-in { opacity: 0.8; }
+
+/* the call scene: her photo and a running timer at the centre of the sound waves */
+.num-call {
+  position: absolute; z-index: 2; left: var(--sx, 69%); top: var(--sy, 52%); translate: -50% -50%;
+  display: grid; justify-items: center; gap: 4px; text-align: center; pointer-events: none;
+  opacity: 0; scale: 0.9; transition: opacity 0.7s, scale 0.9s var(--ease-out);
+}
+.numbers[data-scene='calls'] .num-call { opacity: 1; scale: 1; transition-delay: 0.6s; }
+.num-call-avatar {
+  width: calc(var(--ss, 500px) * 0.22); aspect-ratio: 1; border-radius: 50%; object-fit: cover; object-position: 50% 35%;
+  box-shadow: 0 0 0 3px rgb(255 214 222 / 0.5), 0 0 40px rgb(255 160 190 / 0.45);
+}
+.num-call b { margin-top: 8px; font: 400 clamp(30px, 2.6vw, 44px)/1 var(--font-display); }
+.num-call-timer { font: 300 18px/1 var(--font-body); font-variant-numeric: tabular-nums; letter-spacing: 0.04em; opacity: 0.85; }
+
+/* progress */
+.num-progress {
+  position: absolute; z-index: 3; left: 50%; bottom: calc(var(--frame-inset) + 26px); translate: -50% 0;
+  display: flex; align-items: center; gap: 14px; font: 600 11px var(--font-label); letter-spacing: 0.2em; opacity: 0; transition: opacity 0.6s;
+}
+.numbers.is-docked .num-progress { opacity: 0.85; }
+.np-line { width: 160px; height: 1px; background: color-mix(in srgb, currentColor 25%, transparent); }
+.np-line i { display: block; height: 100%; background: var(--accent); transform-origin: left; transform: scaleX(0); }
+
+/* with her phone (numbers-phone.js): the numbers are on the phone at the left; the text list stays for
+   screen readers only, the title opens on the right, and our hill slides left to keep us in view */
+.numbers.has-phone .num-scenes { clip-path: inset(50%); }
+.numbers.has-phone:not(.is-docked) .numbers-head { left: 66%; }
+.numbers.has-phone .num-horizon { left: -11%; width: 111%; }
+.numbers.has-phone .num-call b, .numbers.has-phone .num-call-timer { display: none; } /* the call runs on the phone */
+
+/* reduced motion: no pin, every number stacked and finished over a still sky */
+.numbers.is-static .num-pin { height: auto; }
+.numbers.is-static .numbers-head { position: relative; left: auto; top: auto; translate: none; padding: 80px var(--gutter) 0; }
+.numbers.is-static .num-scenes { position: static; }
+.numbers.is-static .num-scene { position: relative; min-height: 70svh; opacity: 1; visibility: visible; transform: none; filter: none; }
+.numbers.is-static .num-progress, .numbers.is-static .num-legend, .numbers.is-static .num-call { display: none; }

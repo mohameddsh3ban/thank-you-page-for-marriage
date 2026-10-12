@@ -1,0 +1,39 @@
+/* #07 — cream paper, her in a gold cameo, a scrapbook of taped prints */
+.her { background: var(--paper) var(--wash); color: var(--navy); display: grid; gap: clamp(28px, 4vw, 64px); overflow: hidden; }
+.her::before { /* her name in the clouds, melting into the daylight wash */
+  content: ''; position: absolute; inset: 0 0 auto; height: min(110vh, 1100px); z-index: -1; opacity: 0.6;
+  background: url('/art/sky-b.webp') center / cover no-repeat;
+  mask-image: linear-gradient(#000 40%, transparent); -webkit-mask-image: linear-gradient(#000 40%, transparent);
+}
+.her-head { text-align: center; position: relative; z-index: 2; }
+.her-head .eyebrow { color: var(--navy); }
+.her-title { margin: 0; color: var(--navy); line-height: 0.78; text-transform: uppercase; }
+.her-script { color: var(--red); }
+.her-script { font-size: clamp(26px, 3.6vw, 48px); margin-top: -0.1em; }
+
+.her-cameo { position: relative; margin: -6vw auto 2.5em; width: clamp(240px, 24vw, 360px); aspect-ratio: 880 / 1168; z-index: 3; }
+.her-cameo[hidden] { display: none; }
+.her-cameo-photo { position: absolute; z-index: 2; left: 18.6%; top: 18.8%; width: 62.7%; height: 63.6%; object-fit: cover; border-radius: 50%; }
+.her-cameo-frame { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; filter: drop-shadow(0 20px 28px rgb(26 34 54 / 0.35)); }
+.her-cameo figcaption { position: absolute; left: 0; right: 0; bottom: -1.6em; text-align: center; font-size: clamp(24px, 2.4vw, 34px); color: var(--red); }
+
+.her-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: clamp(22px, 3vw, 48px) clamp(16px, 2.4vw, 36px); padding: 2vw 1vw 4vw; }
+.her-print {
+  position: relative; margin: 0; padding: 10px 10px 36px; background: #fffaf7;
+  box-shadow: 0 18px 30px -18px rgb(26 34 54 / 0.55), 0 0 0 1px rgb(26 34 54 / 0.05);
+  transform: rotate(var(--tilt)) translateY(30px); opacity: 0;
+  transition: opacity 0.9s, transform 1s var(--ease-out);
+}
+.her-print:nth-child(4n + 2) { margin-top: 5vw; }
+.her-print:nth-child(4n + 4) { margin-top: 2.5vw; }
+.her-print.is-in { opacity: 1; transform: rotate(var(--tilt)); }
+.her-print.is-in:hover { transform: rotate(0) scale(1.04); z-index: 2; }
+.her-print::before { /* washi tape */
+  content: ''; position: absolute; top: -12px; left: 50%; width: 46%; height: 24px; translate: -50% 0; rotate: -3deg;
+  background: rgb(239 195 204 / 0.85); mix-blend-mode: multiply; z-index: 2;
+}
+.her-print:nth-child(even)::before { background: rgb(147 179 228 / 0.8); }
+.her-print img, .her-print video { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; }
+.her-print figcaption { position: absolute; left: 12px; right: 12px; bottom: 8px; font: 400 19px/1 var(--font-script); color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.her-empty { text-align: center; font: 400 15px var(--font-body); opacity: 0.7; grid-column: 1 / -1; }
+@media (prefers-reduced-motion: reduce) { .her-print { opacity: 1; transform: rotate(var(--tilt)); } }
