@@ -17,7 +17,7 @@
     "chat:stats": "node scripts/mine-stats.mjs",
     "chat:love": "node scripts/build-love.mjs",
     "pages:dev": "npm run build && wrangler pages dev dist --port 8788 --binding SITE_SECRET=local-test-secret-only",
-    "deploy": "npm run build && wrangler pages deploy dist --project-name thank-you-page --branch main --commit-dirty=true"
+    "deploy": "npm run build && wrangler pages deploy dist --project-name thank-you-page-for-marriage --branch main --commit-dirty=true"
   },
   "devDependencies": {
     "sharp": "^0.34.3",

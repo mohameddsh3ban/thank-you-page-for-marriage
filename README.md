@@ -1,5 +1,7 @@
 # Thank You Page for Marriage
 
+**Live demo:** https://thank-you-page-for-marriage.pages.dev (passcode **0607**, open it on a laptop with sound on)
+
 A scroll-driven "thank you for marrying me" letter, built as a website. She opens a sealed letter,
 unlocks "her phone" with a four-digit passcode, and dives into a long page of chapters: how you met,
 your chat in numbers, every day you talked, the years, the places, her, a gallery, love notes, a letter,
@@ -78,12 +80,12 @@ served once the passcode has set a signed session cookie. `functions/_middleware
 
 ```bash
 npx wrangler login
-npx wrangler pages project create thank-you-page
-npx wrangler pages secret put SITE_SECRET --project-name thank-you-page   # any long random string
+npx wrangler pages project create thank-you-page-for-marriage
+npx wrangler pages secret put SITE_SECRET --project-name thank-you-page-for-marriage   # any long random string
 npm run deploy
 ```
 
-Change `thank-you-page` in the `deploy` script in `package.json` to your own project name.
+Change `thank-you-page-for-marriage` in the `deploy` script in `package.json` to your own project name.
 `npm run pages:dev` runs the production build with the Functions locally on http://localhost:8788.
 
 ## Credits
