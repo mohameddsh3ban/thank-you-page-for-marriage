@@ -1,7 +1,7 @@
 {
   "name": "thank-you-page-for-marriage",
   "version": "1.0.0",
-  "description": "A scroll-driven \"thank you for marrying me\" letter website: a sealed letter, her phone's passcode, then a little museum of your story.",
+  "description": "A scroll-driven \"thank you for marrying me\" letter website: a sealed letter, a note on her phone, then a little museum of your story.",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -10,13 +10,12 @@
     "preview": "vite preview --port 4173",
     "dev:test": "vite --config scripts/vite.nohmr.config.mjs",
     "site": "node scripts/assemble-site.mjs",
-    "passcode": "node scripts/set-passcode.mjs",
     "photos": "node scripts/import-photos.mjs",
     "lyrics": "node scripts/fetch-lyrics.mjs",
     "chat:days": "node scripts/build-days.mjs",
     "chat:stats": "node scripts/mine-stats.mjs",
     "chat:love": "node scripts/build-love.mjs",
-    "pages:dev": "npm run build && wrangler pages dev dist --port 8788 --binding SITE_SECRET=local-test-secret-only",
+    "pages:dev": "npm run build && wrangler pages dev dist --port 8788",
     "deploy": "npm run build && wrangler pages deploy dist --project-name thank-you-page-for-marriage --branch main --commit-dirty=true"
   },
   "devDependencies": {

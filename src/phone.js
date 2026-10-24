@@ -1,32 +1,20 @@
-// Her phone, the gate: a lock screen with a note from me, then the iOS passcode pad. The code is
-// only ever checked by the server (see verify.js). After the right code the phone shows the
-// site downloading, then our photo, and src/dive.js flies into it.
+// Her phone, the gate: a lock screen with a note from me. A tap, a swipe up or any key opens it
+// (and it opens by itself if she just watches); then the phone shows the site downloading, then
+// our photo, and src/dive.js flies into it.
 
-const CODE_LENGTH = 4;
-const WRONG_RESET_MS = 520;    // the dots shake, then empty
-const UNLOCKED_HOLD_MS = 650;  // all four dots stay lit for a beat before the pad lets go
-const SWIPE_PX = 24;           // an upward drag this long on the lock screen opens the pad
-const KEY_FLASH_MS = 140;
+const SWIPE_PX = 24;          // an upward drag this long on the lock screen opens it
+const AUTO_OPEN_MS = 4200;    // long enough to read the note, short enough that nobody waits
+const OPEN_HOLD_MS = 380;     // the lock screen slides away before the download shows
 const TIME = new Intl.DateTimeFormat('en-GB', { hour: 'numeric', minute: '2-digit', hour12: true });
 const DATE = new Intl.DateTimeFormat('en-GB', { weekday: 'long', day: 'numeric', month: 'long' });
 
 const sleep = ms => new Promise(r => setTimeout(r, ms));
-const replay = (el, cls) => { el.classList.remove(cls); void el.offsetWidth; el.classList.add(cls); };
 
-/**
- * @param {HTMLElement} root  #g-phone
- * @param {{ check(code: string): Promise<boolean>, replies: string[], onTry?(): void, onMiss?(): void }} opts
- *   onTry runs inside the tap or key press that completes the code; onMiss after a wrong one.
- */
-export function createPhone(root, { check, replies, onTry, onMiss }) {
+/** @param {HTMLElement} root  #g-phone */
+export function createPhone(root) {
   const q = sel => root.querySelector(sel);
   const device = q('#gp-device');
   const screen = q('#gp-screen');
-  const dots = [...q('#gp-dots').children];
-  const del = q('#gp-del');
-  const hint = q('#gp-hint');
-  const count = q('#gp-count');
-  const pass = q('#gp-pass');
   const fill = q('#gp-load-fill');
   const label = q('#gp-load-label');
   const shade = q('.gp-moon-shade');
@@ -34,11 +22,9 @@ export function createPhone(root, { check, replies, onTry, onMiss }) {
   const retry = q('#gp-retry');
   const home = q('#gp-home');
 
-  let code = '';
-  let busy = false;
-  let misses = 0;
-  let resolveUnlocked;
-  const unlocked = new Promise(r => { resolveUnlocked = r; });
+  let resolveOpened;
+  const opened = new Promise(r => { resolveOpened = r; });
+  let autoOpen = null;
 
   // a real clock and date, like her lock screen
   const paintClock = () => {
@@ -52,106 +38,43 @@ export function createPhone(root, { check, replies, onTry, onMiss }) {
   const state = () => root.dataset.state;
   const setState = s => { root.dataset.state = s; };
 
-  function paintDots() {
-    dots.forEach((d, i) => d.classList.toggle('is-on', i < code.length));
-    del.textContent = code.length ? 'Delete' : 'Cancel';
-    count.textContent = code.length ? `${code.length} of ${CODE_LENGTH}` : '';
-  }
-
-  function openPad() {
+  function open() {
     if (state() !== 'lock') return;
-    setState('pass');
-    hint.textContent = '';
-    q('.gp-key[data-digit="1"]').focus({ preventScroll: true });
+    clearTimeout(autoOpen);
+    clearInterval(clock);
+    removeEventListener('keydown', onKey);
+    resolveOpened();
   }
 
-  async function press(digit) {
-    if (busy || code.length >= CODE_LENGTH) return;
-    code += digit;
-    paintDots();
-    if (code.length === CODE_LENGTH) await submit();
-  }
-
-  function back() {
-    if (busy) return;
-    if (!code.length) { setState('lock'); q('#gp-lock').focus({ preventScroll: true }); return; }
-    code = code.slice(0, -1);
-    paintDots();
-  }
-
-  async function submit() {
-    busy = true;
-    pass.classList.add('is-busy');
-    onTry?.();
-    let ok = false;
-    try {
-      ok = await check(code);
-    } catch (err) {
-      console.error(err);
-      hint.textContent = 'something went wrong · try once more';
-    }
-    if (ok) {
-      await sleep(UNLOCKED_HOLD_MS);
-      clearInterval(clock);
-      resolveUnlocked();
-      return;
-    }
-    onMiss?.();
-    replay(q('#gp-dots'), 'is-wrong');
-    replay(device, 'is-buzz');
-    if (!hint.textContent.startsWith('something')) {
-      hint.textContent = replies[misses % replies.length];
-      replay(hint, 'is-new');
-    }
-    misses += 1;
-    await sleep(WRONG_RESET_MS);
-    code = '';
-    paintDots();
-    busy = false;
-    pass.classList.remove('is-busy');
-  }
-
-  // ---- input: tap the keys, or type on the laptop's keyboard ----
-  q('#gp-lock').addEventListener('click', openPad);
+  // ---- input: tap the lock screen, swipe it up, or press a key on the laptop ----
+  q('#gp-lock').addEventListener('click', open);
   let dragY = null;
   screen.addEventListener('pointerdown', e => { if (state() === 'lock') dragY = e.clientY; });
-  screen.addEventListener('pointermove', e => { if (dragY !== null && dragY - e.clientY > SWIPE_PX) { dragY = null; openPad(); } });
+  screen.addEventListener('pointermove', e => { if (dragY !== null && dragY - e.clientY > SWIPE_PX) { dragY = null; open(); } });
   addEventListener('pointerup', () => { dragY = null; });
-  root.querySelectorAll('.gp-key').forEach(k => k.addEventListener('click', () => press(k.dataset.digit)));
-  del.addEventListener('click', back);
 
   function onKey(e) {
-    if (root.hidden || !['lock', 'pass'].includes(state())) return;
-    if (/^\d$/.test(e.key)) {
-      e.preventDefault();
-      openPad();
-      const k = q(`.gp-key[data-digit="${e.key}"]`);
-      k.classList.add('is-down');
-      setTimeout(() => k.classList.remove('is-down'), KEY_FLASH_MS);
-      press(e.key);
-    } else if (e.key === 'Backspace' && state() === 'pass') {
-      e.preventDefault();
-      back();
-    } else if (state() === 'lock' && (e.key === 'Enter' || e.key === ' ' || e.key === 'ArrowUp')) {
-      e.preventDefault();
-      openPad();
-    }
+    if (root.hidden || state() !== 'lock' || e.metaKey || e.ctrlKey || e.altKey) return;
+    e.preventDefault();
+    open();
   }
   addEventListener('keydown', onKey);
 
   return {
     root, device, screen,
-    /** Resolves once the right code is in and the server has let her through. */
-    unlocked,
+    /** Resolves once she has opened the phone (or it opened by itself). */
+    opened,
     show() {
       root.hidden = false;
       root.closest('.gate')?.classList.add('has-phone');
+      q('#gp-lock').focus({ preventScroll: true });
+      autoOpen = setTimeout(open, AUTO_OPEN_MS);
     },
     /** Switch to the download screen. */
-    loading() {
-      removeEventListener('keydown', onKey);
+    async loading() {
       retry.hidden = true;
       setState('load');
+      await sleep(OPEN_HOLD_MS);
     },
     /** @param {number} p 0..1 @param {string} [text] */
     progress(p, text) {

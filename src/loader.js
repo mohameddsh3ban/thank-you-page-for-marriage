@@ -1,6 +1,6 @@
 // The loading screen: a red moon fills from crescent to full while everything downloads, then the
 // screen steps aside. It runs twice: before the gate (fonts, gate art, the song) and after the gate
-// (everything private, which the server only hands out once she is in).
+// (the rest of the site, loaded once she is in).
 
 const EASE = 0.14;          // how quickly the shown progress chases the real one, per frame
 const SETTLED = 0.0008;

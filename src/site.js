@@ -1,4 +1,4 @@
-// Everything behind the gate. Built into /assets/private/ and only served with a valid session.
+// Everything behind the gate. Built into /assets/private/ and loaded once her phone opens.
 import { CONFIG, paintNames } from './config.js';
 import { initScroll, ScrollTrigger } from './scroll.js';
 export { gsap, setScrollLocked } from './scroll.js'; // the gate holds the hero's entrance (and the scroll) until it has flown in

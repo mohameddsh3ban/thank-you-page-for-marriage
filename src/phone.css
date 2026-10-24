@@ -1,5 +1,5 @@
-/* ---------- HER PHONE: the gate is her own iPhone; she unlocks it with her passcode ----------
-   States on .g-phone[data-state]: lock → pass → load → home → dive. Sizes inside the screen are in
+/* ---------- HER PHONE: the gate is her own iPhone, with a note from me on the lock screen ----------
+   States on .g-phone[data-state]: lock → load → home → dive. Sizes inside the screen are in
    cqw (the screen is an inline-size container), so the whole phone scales from one width. */
 .g-phone {
   --pw: min(300px, calc((100svh - 260px) / 2.05));
@@ -27,8 +27,6 @@
 }
 @keyframes gp-float { 50% { translate: 0 -10px; } }
 .g-phone[data-state='dive'] .gp-device { animation-play-state: paused; }
-.gp-device.is-buzz { animation: gp-buzz 0.42s linear; }
-@keyframes gp-buzz { 0%, 100% { translate: 0 0; } 15%, 55% { translate: -3px 0; } 35%, 75% { translate: 3px 0; } }
 
 .gp-btn { position: absolute; width: 3px; border-radius: 2px; background: linear-gradient(90deg, #232938, #5b657c 60%, #2d3445); }
 .gp-action { left: -2.5px; top: 17%; height: 4.6%; }
@@ -46,7 +44,7 @@
   background: #0b0e18; color: #fff; font-family: var(--font-body); user-select: none;
 }
 
-/* wallpaper: our sky with roses at the foot; it blurs behind the keypad like iOS does */
+/* wallpaper: our sky with roses at the foot; it blurs once the phone opens, like iOS does */
 .gp-wall {
   position: absolute; inset: -6%; z-index: 0;
   background: linear-gradient(rgb(18 24 44 / 0.18), transparent 40%, rgb(18 24 44 / 0.22)), url('/art/gate/sky-b.webp') 38% 30% / cover;
@@ -80,11 +78,11 @@
 .gp-battery i { display: block; height: 100%; width: 78%; border-radius: 0.5cqw; background: currentColor; }
 
 /* the three layers above the wallpaper share one way in and out */
-.gp-lock, .gp-pass, .gp-load {
+.gp-lock, .gp-load {
   position: absolute; inset: 0; z-index: 10; opacity: 0; visibility: hidden;
   transition: opacity 0.45s ease, transform 0.6s var(--ease-out), visibility 0s 0.6s;
 }
-.g-phone[data-state='lock'] .gp-lock, .g-phone[data-state='pass'] .gp-pass, .g-phone[data-state='load'] .gp-load {
+.g-phone[data-state='lock'] .gp-lock, .g-phone[data-state='load'] .gp-load {
   opacity: 1; visibility: visible; transform: none; transition: opacity 0.5s ease 0.1s, transform 0.7s var(--ease-out) 0.05s, visibility 0s;
 }
 
@@ -117,33 +115,7 @@
 }
 @keyframes gp-shimmer { 50% { opacity: 0.45; translate: 0 -0.8cqw; } }
 
-/* ---- 2 · passcode ---- */
-.gp-pass { display: grid; justify-items: center; align-content: start; transform: translateY(10cqw) scale(0.96); }
-.gp-pass-title { margin: 30cqw 0 0; font: 500 4.8cqw/1 var(--font-body); }
-.gp-dots { display: flex; gap: 6cqw; margin-top: 6cqw; }
-.gp-dots i { width: 3.4cqw; height: 3.4cqw; border-radius: 50%; border: 0.4cqw solid #fff; transition: background 0.12s; }
-.gp-dots i.is-on { background: #fff; }
-.gp-dots.is-wrong { animation: gp-shake 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
-@keyframes gp-shake { 10%, 90% { translate: -1.5cqw 0; } 20%, 80% { translate: 3cqw 0; } 30%, 50%, 70% { translate: -5cqw 0; } 40%, 60% { translate: 5cqw 0; } }
-.gp-keys { display: grid; grid-template-columns: repeat(3, 20cqw); gap: 4cqw 7cqw; margin-top: 12cqw; }
-.gp-key {
-  width: 20cqw; height: 20cqw; border-radius: 50%; display: grid; place-content: center; gap: 0.2cqw; padding: 0;
-  color: #fff; background: rgb(255 255 255 / 0.16); transition: background 0.4s ease;
-}
-.gp-key b { font: 300 9cqw/1 var(--font-body); }
-.gp-key small { min-height: 2.6cqw; font: 700 2.3cqw/1 var(--font-body); letter-spacing: 0.22em; padding-left: 0.22em; }
-.gp-key:hover { background: rgb(255 255 255 / 0.24); }
-.gp-key:active, .gp-key.is-down { background: rgb(255 255 255 / 0.55); transition: none; }
-.gp-key:focus-visible, .gp-del:focus-visible { outline: 0.5cqw solid #fff; outline-offset: 0.8cqw; }
-.gp-pass-foot {
-  position: absolute; left: 13cqw; right: 13cqw; bottom: 11cqw; display: flex; justify-content: space-between;
-  font: 400 4.2cqw/1 var(--font-body);
-}
-.gp-del { padding: 0; color: #fff; font: inherit; }
-.gp-pass.is-busy .gp-keys { pointer-events: none; }
-.gp-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-
-/* ---- 3 · loading (the site downloads after the right code) ---- */
+/* ---- 2 · loading (the site downloads once it's open) ---- */
 .gp-load { display: grid; justify-items: center; align-content: center; gap: 6cqw; transform: scale(1.06); }
 .gp-moon { width: 18cqw; }
 .gp-moon-lit { fill: var(--red-bright); }

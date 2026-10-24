@@ -29,7 +29,7 @@ function lyricsSaver() {
 }
 
 // Everything that belongs to the site behind the gate (site.js + its CSS + shared deps it pulls in
-// only after unlocking) is emitted under assets/private/, which the Pages middleware protects.
+// only after the gate) is emitted under assets/private/, so the gate's own bundle stays small.
 const isPrivate = name => /^(site|sections|content)/.test(name || '');
 
 export default defineConfig({

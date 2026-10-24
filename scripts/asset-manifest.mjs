@@ -2,9 +2,9 @@
 // screens can fetch all of it up front with exact byte totals. Nothing is hand-listed: new art
 // referenced anywhere in src/ (or site.html) is picked up on the next build or dev reload.
 //
-// Two lists, matching what the Pages middleware lets through:
-//   gate — public before unlock (/art/gate/, /audio/, /lyrics.lrc), fetched by the first loader
-//   site — everything private (/art/, /photos/, /videos/, /private/), fetched after unlock
+// Two lists:
+//   gate — what the gate needs (/art/gate/, /audio/, /lyrics.lrc), fetched by the first loader
+//   site — everything else (/art/, /photos/, /videos/, /private/), fetched once her phone opens
 //
 // Template literals such as `/art/tear-${t.tone}-${t.v}.webp` become wildcards and match every
 // file on disk with that shape.

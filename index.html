@@ -65,7 +65,7 @@
       <p class="g-sub"><span class="g-tap">tap the seal</span><span class="g-dot">·</span>turn your sound on</p>
     </div>
 
-    <!-- her phone: she unlocks it with her own passcode, then we dive into it and land on the hero -->
+    <!-- her phone: a note on the lock screen; she opens it, then we dive into it and land on the hero -->
     <div class="g-phone" id="g-phone" data-state="lock" hidden>
       <div class="gp-device" id="gp-device">
         <span class="gp-btn gp-action" aria-hidden="true"></span>
@@ -86,7 +86,7 @@
           </div>
 
           <!-- the lock screen: a note from me waiting on it -->
-          <button type="button" class="gp-lock" id="gp-lock" aria-label="Your phone is locked. Open it to type your passcode">
+          <button type="button" class="gp-lock" id="gp-lock" aria-label="A note on your phone. Open it">
             <svg class="gp-padlock" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>
             <span class="gp-date" id="gp-date"></span>
             <span class="gp-time" id="gp-time"></span>
@@ -97,29 +97,7 @@
             <span class="gp-swipe" aria-hidden="true">swipe up to open</span>
           </button>
 
-          <!-- the passcode screen -->
-          <div class="gp-pass" id="gp-pass" role="group" aria-labelledby="gp-pass-title">
-            <p class="gp-pass-title" id="gp-pass-title">Enter Passcode</p>
-            <div class="gp-dots" id="gp-dots" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
-            <p class="gp-sr" id="gp-count" aria-live="polite"></p>
-            <div class="gp-keys">
-              <button type="button" class="gp-key" data-digit="1" aria-label="1"><b>1</b><small></small></button>
-              <button type="button" class="gp-key" data-digit="2" aria-label="2"><b>2</b><small>ABC</small></button>
-              <button type="button" class="gp-key" data-digit="3" aria-label="3"><b>3</b><small>DEF</small></button>
-              <button type="button" class="gp-key" data-digit="4" aria-label="4"><b>4</b><small>GHI</small></button>
-              <button type="button" class="gp-key" data-digit="5" aria-label="5"><b>5</b><small>JKL</small></button>
-              <button type="button" class="gp-key" data-digit="6" aria-label="6"><b>6</b><small>MNO</small></button>
-              <button type="button" class="gp-key" data-digit="7" aria-label="7"><b>7</b><small>PQRS</small></button>
-              <button type="button" class="gp-key" data-digit="8" aria-label="8"><b>8</b><small>TUV</small></button>
-              <button type="button" class="gp-key" data-digit="9" aria-label="9"><b>9</b><small>WXYZ</small></button>
-              <span class="gp-key-gap" aria-hidden="true"></span>
-              <button type="button" class="gp-key" data-digit="0" aria-label="0"><b>0</b><small></small></button>
-              <span class="gp-key-gap" aria-hidden="true"></span>
-            </div>
-            <div class="gp-pass-foot"><span aria-hidden="true">Emergency</span><button type="button" class="gp-del" id="gp-del">Cancel</button></div>
-          </div>
-
-          <!-- after the right code: everything private downloads, shown like a phone restarting into us -->
+          <!-- once it's open: the rest of the site downloads, shown like a phone restarting into us -->
           <div class="gp-load" id="gp-load" role="progressbar" aria-label="Opening" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
             <svg class="gp-moon" viewBox="0 0 40 40" aria-hidden="true">
               <mask id="gp-moon-mask"><rect x="0" y="0" width="40" height="40" fill="#fff"/><circle class="gp-moon-shade" cx="14" cy="20" r="17" fill="#000"/></mask>

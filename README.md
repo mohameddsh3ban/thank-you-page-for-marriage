@@ -1,9 +1,9 @@
 # Thank You Page for Marriage
 
-**Live demo:** https://thank-you-page-for-marriage.pages.dev (passcode **0607**, open it on a laptop with sound on)
+**Live demo:** https://letter.devstudiocraft.com (open it on a laptop with sound on)
 
 A scroll-driven "thank you for marrying me" letter, built as a website. She opens a sealed letter,
-unlocks "her phone" with a four-digit passcode, and dives into a long page of chapters: how you met,
+finds a note on "her phone", opens it and dives into a long page of chapters: how you met,
 your chat in numbers, every day you talked, the years, the places, her, a gallery, love notes, a letter,
 and a final thank you timed to your song.
 
@@ -21,22 +21,19 @@ npm install
 npm run dev          # http://localhost:5173
 ```
 
-Demo passcode: **0607** (the wedding day, 07 June).
-
 Dev-only URL flags (ignored in production builds):
 
 | URL | What it does |
 | --- | --- |
 | `/?open` | skips the gate and every loader, so you can work on the chapters quickly (no music) |
 | `/?preload` | skips the gate but runs the second loading screen |
-| `/?phone` | goes straight to the phone passcode screen (no letter, no music) |
+| `/?phone` | goes straight to the phone's lock screen (no letter, no music) |
 
 ## Make it yours
 
 | What | Where |
 | --- | --- |
-| Names, dates, wrong-passcode replies, the song | `src/config.js` (`herName`, `fromName`, `metOn`, `officialDay`, `weddingDay`, `gate`, `song`) |
-| Passcode | `npm run passcode -- 1234`. Only its SHA-256 goes into `functions/_lib/answers.json` |
+| Names, dates, the song | `src/config.js` (`herName`, `fromName`, `metOn`, `officialDay`, `weddingDay`, `song`) |
 | Chapter markup and copy | `site-src/NN-<chapter>.html`, then `node scripts/assemble-site.mjs` (or `npm run site`) to rebuild `public/private/site.html` |
 | Chapter data (photos, letter, places, stats, timeline…) | `src/content/*` |
 | Day cards and love notes | `public/private/day-cards.json`, `public/private/love.json` |
@@ -74,19 +71,17 @@ sound and the beat-reactive effects:
 
 ## Deploy (Cloudflare Pages)
 
-The gate is real. Everything behind it (the site's code, `/private/`, `/photos/`, the art) is only
-served once the passcode has set a signed session cookie. `functions/_middleware.js` and
-`functions/api/unlock.js` handle that as Pages Functions.
+It's a static site: `dist/` after `npm run build`. `public/_headers` sets the cache rules the loading
+screens rely on (hashed bundles forever, media for a day) and keeps it out of search engines.
 
 ```bash
 npx wrangler login
 npx wrangler pages project create thank-you-page-for-marriage
-npx wrangler pages secret put SITE_SECRET --project-name thank-you-page-for-marriage   # any long random string
 npm run deploy
 ```
 
 Change `thank-you-page-for-marriage` in the `deploy` script in `package.json` to your own project name.
-`npm run pages:dev` runs the production build with the Functions locally on http://localhost:8788.
+Anything you put on it is public to whoever has the link, so mind what you publish from your own chat.
 
 ## Credits
 

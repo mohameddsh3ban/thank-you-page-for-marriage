@@ -1,6 +1,4 @@
 // The one place to make this site yours: names, dates and the song.
-// The gate's passcode is NOT here: it is checked server-side against a SHA-256 hash in
-// functions/_lib/answers.json (see the README), so nothing secret ships to the browser.
 export const CONFIG = {
   herName: 'Mia',   // who the letter is for (the big script title, the phone, the chapters)
   fromName: 'Mark', // who wrote it (the lock-screen notification, the notes, the signatures)
@@ -9,11 +7,6 @@ export const CONFIG = {
   metOn: '2019-09-14T23:30:00-04:00',       // the first message: the hero counts up from here
   officialDay: '2019-10-05T00:00:00-04:00', // the first date / the day it became official
   weddingDay: '2025-06-07T16:00:00-04:00',  // the day she said "i do"
-
-  gate: {
-    // what she hears when she mistypes her own phone's passcode (they take turns)
-    wrongReplies: ['nope 😂', 'your own phone?', 'think, mia · what day was it?', 'so close · try again'],
-  },
 
   song: {
     title: 'Thank You',

@@ -1,7 +1,6 @@
 import { CONFIG } from './config.js';
 import { createSong } from './audio.js';
 import { startLyrics } from './lyrics.js';
-import { unlock } from './verify.js';
 import { createPhone } from './phone.js';
 import { dive } from './dive.js';
 import { assetUrl, decoded, preloadAll } from './preload.js';
@@ -107,27 +106,22 @@ function setPausedUi(paused) {
   $('#player-ctrl').hidden = !paused;
 }
 
-/* ---------- step 0: tap the seal → her phone rises ---------- */
+/* ---------- step 0: tap the seal → the song starts, her phone rises ---------- */
 function begin() {
   beginBtn.disabled = true;
+  primeSong(); // inside the tap: Safari only lets sound start in a gesture
+  startSong();
   gate.classList.add('is-playing'); // the letter slips away (class name kept for the CSS)
   setTimeout(showPhone, PHONE_DELAY_MS);
 }
 
-/* ---------- the song starts with the right passcode ----------
-   Safari only lets sound start inside a tap, and the code is checked after it, so the last digit
-   starts the song silently; the right code rewinds it and fades it in, a wrong one stops it. */
+/* ---------- the song starts with the seal ----------
+   prime() starts it silently inside the tap; startSong() rewinds it and fades it in. */
 const SONG_FADE_IN_S = 0.4;
 let primed = null;
 function primeSong() {
   if (!song || song.playing) return;
   primed = song.prime().then(() => true, err => { console.error(err); return false; });
-}
-function hushSong() {
-  if (!song || !primed) return;
-  song.pause();
-  song.seek(0);
-  primed = null;
 }
 async function startSong() {
   if (!song) song = await songReady;
@@ -150,20 +144,19 @@ async function startSong() {
   $('#now-playing').hidden = false;
 }
 
-/* ---------- her phone: she unlocks it with her own passcode ---------- */
+/* ---------- her phone: a note on the lock screen, then she opens it ---------- */
 let phone = null;
 async function showPhone() {
-  phone = createPhone($('#g-phone'), { check: unlock, replies: CONFIG.gate.wrongReplies, onTry: primeSong, onMiss: hushSong });
+  phone = createPhone($('#g-phone'));
   phone.show();
-  await phone.unlocked;
-  startSong();
-  phone.loading();
+  await phone.opened;
+  await phone.loading();
   arriveThroughPhone();
 }
 
-/* ---------- open: everything private downloads, then the site ---------- */
-// The server only hands out the site's code, photos, videos and art once the passcode has set the
-// session cookie, so this half of the loading happens after the gate, on her phone's screen.
+/* ---------- open: the rest of the site downloads, then the site ---------- */
+// The gate only waits for its own art and the song; the site's code, photos, videos and art load
+// after it, on her phone's screen.
 const SITE_CODE_BYTES = 520_000; // the site's own code + styles, roughly, for their share of the bar
 const SITE_KIND = [
   [/^\/private\//, 'gathering every love message', 1], [/^\/art\//, 'pressing the roses', 2],
